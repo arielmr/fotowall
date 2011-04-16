@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWheelEvent>
-
+#include <QDebug>
 /// The style used by the SceneView's rubberband selection
 class RubberBandStyle : public QCommonStyle
 {
@@ -84,6 +84,10 @@ SceneView::SceneView(QWidget * parent)
 
     // can't activate the cache mode by default, since it inhibits dynamical background picture changing
     //setCacheMode(CacheBackground);
+    setAttribute(Qt::WA_AcceptTouchEvents);
+//    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
+    grabGesture(Qt::SwipeGesture);
 }
 
 SceneView::~SceneView()
@@ -293,7 +297,43 @@ void SceneView::wheelEvent(QWheelEvent * event)
     }
     QGraphicsView::wheelEvent(event);
 }
+bool SceneView::viewportEvent(QEvent *event)
+{    
+    if (event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchEnd){
+        QTouchEvent *touchEvent = 0;
+        if ((touchEvent = static_cast<QTouchEvent *>(event))){
+//            qDebug() << "Touches at the View" << touchEvent->touchPoints().size();
+            if (touchEvent->touchPoints().size()){
+                emit showMenu(touchEvent->touchPoints().first().pos());
+            }
+        }
+        QGraphicsView::viewportEvent(event);
+        return true;
+    }
+    else if (event->type() == QEvent::Gesture){
+        return gestureEvent(static_cast<QGestureEvent*>(event));
+    }
+    return QGraphicsView::viewportEvent(event);
+}
+bool SceneView::gestureEvent(QGestureEvent* event){
+    qDebug()<< "Gesture at SceneView"  << QTime::currentTime();
+    QGesture *pinch = 0;
+    QGesture *swipe = 0;
+    QGesture *pan   = 0;
+    pinch = event->gesture(Qt::PinchGesture);
+    swipe = event->gesture(Qt::SwipeGesture);
+    pan = event->gesture(Qt::PanGesture);
 
+    if (pinch = event->gesture(Qt::PinchGesture))
+        qDebug()<< "    Gesture is pinch" ;
+    if (swipe = event->gesture(Qt::SwipeGesture))
+        qDebug()<< "    Gesture is swipe" ;
+    if (pan = event->gesture(Qt::PanGesture)){
+        qDebug()<< "    Gesture is pan" ;
+    }
+
+    return true;
+}
 void SceneView::slotLayoutScene()
 {
     if (!m_abstractScene)

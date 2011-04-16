@@ -22,14 +22,15 @@
 namespace Wordcloud { class Cloud; }
 class BreadCrumbBar;
 class Canvas;
-
+class SceneView;
 // TODO: add checkes to avoid enqueueing while processing a command, or a list
 
 class Workflow : public QObject
 {
     Q_OBJECT
     public:
-        Workflow(PlugGui::Container * container, BreadCrumbBar * bar, QObject * parent = 0);
+        Workflow(PlugGui::Container * container, BreadCrumbBar * bar, SceneView* = 0, QObject * parent = 0);
+
         ~Workflow();
 
         // change workflow
@@ -88,6 +89,8 @@ class Workflow : public QObject
 
         // nodes structure
         QList<Node> m_stack;
+
+        SceneView*  m_sceneView;
 
     private Q_SLOTS:
         void slotNodeClicked(quint32);

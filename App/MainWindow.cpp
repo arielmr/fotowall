@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget * parent)
     ui->accelTestButton->setEnabled(ui->sceneView->supportsOpenGL());
     ui->applianceSidebar->hide();
     ui->sceneView->setFocus();
+    ui->sceneView->setAttribute(Qt::WA_AcceptTouchEvents, true);
     connect(ui->sceneView, SIGNAL(heavyRepaint()), this, SLOT(slotRenderingSlow()));
     createLikeBack();
 
@@ -96,7 +97,9 @@ MainWindow::MainWindow(QWidget * parent)
         ui->transpBox->setChecked(true);
 
     // start the workflow
-    new Workflow((PlugGui::Container *)this, workflowBar);
+//    new Workflow((PlugGui::Container *)this, workflowBar);
+    new Workflow((PlugGui::Container *)this, workflowBar, ui->sceneView);
+
 
     // create the online services
     new OnlineServices(m_networkAccessManager);

@@ -21,7 +21,7 @@ class AbstractScene;
 class QGridLayout;
 class QPixmap;
 class RubberBandStyle;
-
+class QGestureEvent;
 class SceneView : public QGraphicsView
 {
     Q_OBJECT
@@ -50,6 +50,7 @@ class SceneView : public QGraphicsView
 
         // properties notifications
         void viewScaleChanged();
+        void showMenu(QPointF pos);
 
     protected:
         // ::QGraphicsView
@@ -58,6 +59,9 @@ class SceneView : public QGraphicsView
         void paintEvent(QPaintEvent * event);
         void resizeEvent(QResizeEvent * event);
         void wheelEvent(QWheelEvent *event);
+        bool viewportEvent(QEvent *event);
+
+        bool gestureEvent(QGestureEvent* event);
 
     private:
         qreal m_viewScale;

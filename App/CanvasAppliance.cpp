@@ -37,6 +37,8 @@
 #include <QSlider>
 #include <QWidgetAction>
 
+#include <QDeclarativeItem>
+#include <QDeclarativeEngine>
 
 CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
   : QObject(parent)
@@ -99,6 +101,27 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
         case CanvasModeInfo::ModeWallpaper: pComboIndex = 2; break;
     }
     slotProjectComboActivated(pComboIndex);
+
+    QDeclarativeEngine *engine = new QDeclarativeEngine;
+
+    engine->setBaseUrl(QUrl("qrc:/qml/data/qml/"));
+//    engine->addImportPath("qrc:/qml/data/qml/imports/");
+//    engine->addImportPath("/home/itai/git/projects/fotowall/data/qml/imports/");
+    engine->addImportPath("/home/itai/git/qml-toucharea/TouchArea-build-desktop/imports/");
+
+    QDeclarativeComponent component(engine, QUrl("qrc:/qml/data/qml/menu.qml"));
+
+    if (component.status() != QDeclarativeComponent::Ready)
+        qDebug() << component.errorString();
+
+    m_menu = qobject_cast<QGraphicsObject *>(component.create());
+    m_menu->setAcceptTouchEvents(true);
+
+    connect(m_menu, SIGNAL(sToolsText()), this, SLOT(slotAddText()));
+    connect(m_menu, SIGNAL(sInsertPicture()), this, SLOT(slotAddPicture()));
+
+    m_finger= new QGraphicsEllipseItem(0,0,50,50);
+    m_extCanvas->addItem(m_finger);
 }
 
 CanvasAppliance::~CanvasAppliance()
@@ -110,6 +133,8 @@ CanvasAppliance::~CanvasAppliance()
     delete ui.canvasPropertiesBox;
     delete ui.fileBox;
     delete m_dummyWidget;
+    if (m_menu)
+        delete m_menu;
 }
 
 Canvas * CanvasAppliance::takeCanvas()
@@ -639,4 +664,16 @@ void CanvasAppliance::slotVerifyVideoInputs(int count)
         ui.addWebcamLayout->addWidget(p);
         m_webcamButtons.append(p);
     }
+}
+void CanvasAppliance::slotShowMenu(QPointF position){
+    static bool a=false;
+    m_finger->setPos(position);
+    if (m_extCanvas){
+        if (!a){
+            m_extCanvas->addItem(m_menu);
+            m_menu->setPos(position - QPointF(m_menu->boundingRect().width()/2.0, m_menu->boundingRect().height()/2.0));
+            a=true;
+        }
+    }
+
 }

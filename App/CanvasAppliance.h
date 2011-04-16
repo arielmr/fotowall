@@ -21,6 +21,7 @@ class QMenu;
 class AbstractContent;
 class Canvas;
 class PixmapButton;
+class QGraphicsObject;
 
 class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
 {
@@ -57,9 +58,10 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         QActionGroup *              m_gBackRatioGroup;
         QAction *                   m_gBackContentAction;
         QList<PixmapButton *>       m_webcamButtons;
+        QGraphicsObject*            m_menu;
+        QGraphicsItem*              m_finger;
 
     private Q_SLOTS:
-
         // actions in the Add contents box
         void slotAddCanvas();
         void slotAddPicture();
@@ -95,6 +97,8 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
 
         // other actions
         void slotVerifyVideoInputs(int count);
+
+        void slotShowMenu(QPointF);
 };
 
 #endif

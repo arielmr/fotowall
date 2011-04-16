@@ -28,8 +28,9 @@
 #include "WordcloudAppliance.h"
 #endif
 
+#include "SceneView.h"
 #include <QTimer>
-
+#include <QDebug>
 // on mobile the "cancel" button doesn't behave in a good way.. use the "no" one
 #if defined(MOBILE_UI)
 #define STANDARDBUTTON_NEGATIVE QDialogButtonBox::No
@@ -38,12 +39,13 @@
 #endif
 
 
-Workflow::Workflow(PlugGui::Container * container, BreadCrumbBar * bar, QObject * parent)
+Workflow::Workflow(PlugGui::Container * container, BreadCrumbBar * bar, SceneView* sview, QObject * parent)
   : QObject(parent)
   , m_container(container)
   , m_bar(bar)
   , m_commandTimer(0)
   , m_processingQueue(false)
+  , m_sceneView(sview)
 {
     // set the global reference
     App::workflow = this;
@@ -312,6 +314,16 @@ void Workflow::pushNode(const Node & node)
     if (m_container)
         node.appliance->addToApplianceContainer(m_container);
     updateBreadcrumb();
+    if (CanvasAppliance * canvasApp = dynamic_cast<CanvasAppliance *>(node.appliance)) {
+        qDebug() << "Es un canvas";
+        if (m_sceneView){
+            qDebug() << "Connecting";
+            connect(this->m_sceneView, SIGNAL(showMenu(QPointF)), canvasApp, SLOT(slotShowMenu(QPointF)));
+        }
+    }
+    else{
+        qDebug() << "NO es un canvas";
+    }
 }
 
 bool Workflow::popNode(bool allowSave)
