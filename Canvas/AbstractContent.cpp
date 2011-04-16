@@ -40,7 +40,8 @@
 #include <QGraphicsDropShadowEffect>
 #endif
 
-
+#include <QGesture>
+#include <QDebug>
 AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noRescale, QGraphicsItem * parent)
     : AbstractDisposeable(fadeIn, parent)
     , m_contentRect(-100, -75, 200, 150)
@@ -69,6 +70,8 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     // allow some items (eg. the shape controls for text) to be shown
     setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
     setAcceptHoverEvents(true);
+    setAcceptTouchEvents(true);
+    grabGesture(Qt::PinchGesture);
 
     // create child controls
     createCorner(Qt::TopLeftCorner, noRescale);
@@ -700,7 +703,62 @@ void AbstractContent::paint(QPainter * painter, const QStyleOptionGraphicsItem *
         painter->drawRect(tcRect.adjusted(1, 1, -1, -1));
     }
 }
+bool AbstractContent::sceneEvent(QEvent *event)
+{
+    if (event->type() == QEvent::Gesture)
+        return gestureEvent(static_cast<QGestureEvent*>(event));
+    switch (event->type()) {
+         case QEvent::TouchBegin:
+         case QEvent::TouchUpdate:
+         case QEvent::TouchEnd:
+         {
+             QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
+             foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
+                 switch (touchPoint.state()) {
+                 case Qt::TouchPointStationary:
+                     // don't do anything if this touch point hasn't moved
+                     continue;
+                 default:
+                     {
+                     }
+                     break;
+                 }
+             }
+             break;
+         }
+         default:
+             return QGraphicsItem::sceneEvent(event);
+         }
+         return true;
+}
+bool AbstractContent::gestureEvent(QGestureEvent* event)
+{
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
+        pinchGesture(static_cast<QPinchGesture *>(pinch));
+    }
 
+}
+void AbstractContent::pinchGesture(QPinchGesture* gesture){
+    QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
+    if (changeFlags & QPinchGesture::RotationAngleChanged) {
+        qreal value = gesture->property("rotationAngle").toReal();
+        qreal lastValue = gesture->property("lastRotationAngle").toReal();
+//        rotationAngle += value - lastValue;
+        this->rotate(value-lastValue);
+    }
+    if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+        qreal value = gesture->property("scaleFactor").toReal();
+        this->scale(value, value);
+    }
+    if (gesture->state() == Qt::GestureFinished) {
+//        scaleFactor *= currentStepScaleFactor;
+//        currentStepScaleFactor = 1;
+    }
+    if (changeFlags & QPinchGesture::CenterPointChanged) {
+        this->setPos(gesture->centerPoint());
+    }
+    update();
+}
 void AbstractContent::selectionChanged(bool /*selected*/)
 {
     // nothing to do here.. only used by subclasses

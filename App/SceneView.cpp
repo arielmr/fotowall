@@ -310,27 +310,27 @@ bool SceneView::viewportEvent(QEvent *event)
         QGraphicsView::viewportEvent(event);
         return true;
     }
-    else if (event->type() == QEvent::Gesture){
-        return gestureEvent(static_cast<QGestureEvent*>(event));
-    }
+//    else if (event->type() == QEvent::Gesture){
+//        return gestureEvent(static_cast<QGestureEvent*>(event));
+//    }
     return QGraphicsView::viewportEvent(event);
 }
 bool SceneView::gestureEvent(QGestureEvent* event){
-    qDebug()<< "Gesture at SceneView"  << QTime::currentTime();
-    QGesture *pinch = 0;
-    QGesture *swipe = 0;
-    QGesture *pan   = 0;
-    pinch = event->gesture(Qt::PinchGesture);
-    swipe = event->gesture(Qt::SwipeGesture);
-    pan = event->gesture(Qt::PanGesture);
+//    qDebug()<< "Gesture at SceneView"  << QTime::currentTime();
+//    QGesture *pinch = 0;
+//    QGesture *swipe = 0;
+//    QGesture *pan   = 0;
+//    pinch = event->gesture(Qt::PinchGesture);
+//    swipe = event->gesture(Qt::SwipeGesture);
+//    pan = event->gesture(Qt::PanGesture);
 
-    if (pinch = event->gesture(Qt::PinchGesture))
-        qDebug()<< "    Gesture is pinch" ;
-    if (swipe = event->gesture(Qt::SwipeGesture))
-        qDebug()<< "    Gesture is swipe" ;
-    if (pan = event->gesture(Qt::PanGesture)){
-        qDebug()<< "    Gesture is pan" ;
-    }
+//    if (pinch = event->gesture(Qt::PinchGesture))
+//        qDebug()<< "    Gesture is pinch" ;
+//    if (swipe = event->gesture(Qt::SwipeGesture))
+//        qDebug()<< "    Gesture is swipe" ;
+//    if (pan = event->gesture(Qt::PanGesture)){
+//        qDebug()<< "    Gesture is pan" ;
+//    }
 
     return true;
 }

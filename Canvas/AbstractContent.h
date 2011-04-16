@@ -27,7 +27,8 @@ class Frame;
 class MirrorItem;
 class QGraphicsTextItem;
 class QPointF;
-
+class QGestureEvent;
+class QPinchGesture;
 
 /// \brief Base class of Canvas Item (with lots of gadgets!)
 class AbstractContent : public AbstractDisposeable
@@ -94,6 +95,11 @@ class AbstractContent : public AbstractDisposeable
         QRectF boundingRect() const;
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
         void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+
+        // Touch enablers
+        virtual bool sceneEvent(QEvent *event);
+        virtual bool gestureEvent(QGestureEvent* event);
+        virtual void pinchGesture(QPinchGesture* gesture);
 
     Q_SIGNALS:
         // to canvas
