@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/" >
+    <qresource prefix="/">
         <file>data/action-add.png</file>
         <file>data/action-clear-r.png</file>
         <file>data/action-configure.png</file>
@@ -58,10 +58,28 @@
         <file>translations/fotowall_pl.qm</file>
         <file>translations/fotowall_pt_BR.qm</file>
     </qresource>
-    <qresource prefix="/plasma-frames" >
-        <file alias="1.svg" >data/frame-plasma-1.svg</file>
-        <file alias="2.svg" >data/frame-plasma-2.svg</file>
-        <file alias="3.svg" >data/frame-plasma-3.svg</file>
-        <file alias="4.svg" >data/frame-plasma-4.svg</file>
+    <qresource prefix="/plasma-frames">
+        <file alias="1.svg">data/frame-plasma-1.svg</file>
+        <file alias="2.svg">data/frame-plasma-2.svg</file>
+        <file alias="3.svg">data/frame-plasma-3.svg</file>
+        <file alias="4.svg">data/frame-plasma-4.svg</file>
+    </qresource>
+    <qresource prefix="/qml">
+        <file>data/qml/Angulo.qml</file>
+        <file>data/qml/menu.qml</file>
+        <file>data/qml/SubAngulo.qml</file>
+        <file>data/qml/SubmenuEdit.qml</file>
+        <file>data/qml/SubmenuFile.qml</file>
+        <file>data/qml/SubmenuHelp.qml</file>
+        <file>data/qml/SubmenuInsert.qml</file>
+        <file>data/qml/SubmenuNavigation.qml</file>
+        <file>data/qml/SubmenuSession.qml</file>
+        <file>data/qml/SubmenuTools.qml</file>
+        <file>data/qml/images/angulo.png</file>
+        <file>data/qml/images/axis.png</file>
+        <file>data/qml/images/centroid.png</file>
+        <file>data/qml/images/layer_1.png</file>
+        <file>data/qml/imports/Qt/labs/toucharea/libqmltouchareaplugin.so</file>
+        <file>data/qml/imports/Qt/labs/toucharea/qmldir</file>
     </qresource>
 </RCC>
