@@ -68,6 +68,7 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         void slotAddText();
         void slotAddWebcam();
         void slotAddWordcloud();
+        void slotAddFingerPaint();
         void slotSearchPicturesToggled(bool on);
 
         // actions in the Canvas box

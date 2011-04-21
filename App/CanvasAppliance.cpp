@@ -21,6 +21,7 @@
 #include "Shared/PanePropertyEditor.h"
 #include "Shared/VideoProvider.h"
 #include "Canvas/WordcloudContent.h"
+#include "Canvas/FingerPaintContent.h"
 #include "App.h"
 #include "ExactSizeDialog.h"
 #if defined(HAS_EXPORTDIALOG)
@@ -119,8 +120,9 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
 
     connect(m_menu, SIGNAL(sToolsText()), this, SLOT(slotAddText()));
     connect(m_menu, SIGNAL(sInsertPicture()), this, SLOT(slotAddPicture()));
+    connect(m_menu, SIGNAL(sFreehand()), this, SLOT(slotAddFingerPaint()));
 
-    m_finger= new QGraphicsEllipseItem(0,0,50,50);
+    m_finger= new QGraphicsEllipseItem(-10,-10,20,20, 0, 0);
     m_extCanvas->addItem(m_finger);
 }
 
@@ -451,7 +453,14 @@ void CanvasAppliance::slotAddWordcloud()
     m_extCanvas->addWordcloudContent();
     setFocusToScene();
 }
-
+void CanvasAppliance::slotAddFingerPaint()
+{
+    AbstractContent* content = new FingerPaintContent(true, m_extCanvas);
+    content->rotate(45);
+    m_extCanvas->addManualContent(content, QPoint(113,279));
+    connect (content, SIGNAL(requestNestedCanvas(QString)), m_extCanvas, SLOT(slotNestedCanvas(QString)));
+    setFocusToScene();
+}
 void CanvasAppliance::slotSearchPicturesToggled(bool visible)
 {
     containerValueSet(App::CC_ShowPictureSearch, visible);

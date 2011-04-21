@@ -24,8 +24,8 @@ HEADERS += \
     Canvas/TextContent.h \
     Canvas/TextProperties.h \
     Canvas/WebcamContent.h \
-    Canvas/WordcloudContent.h
-
+    Canvas/WordcloudContent.h \
+    Canvas/FingerPaintContent.h
 SOURCES += \
     Canvas/AbstractConfig.cpp \
     Canvas/AbstractContent.cpp \
@@ -46,7 +46,8 @@ SOURCES += \
     Canvas/TextContent.cpp \
     Canvas/TextProperties.cpp \
     Canvas/WebcamContent.cpp \
-    Canvas/WordcloudContent.cpp
+    Canvas/WordcloudContent.cpp \
+    Canvas/FingerPaintContent.cpp
 
 FORMS += \
     Canvas/AbstractConfig.ui \
