@@ -1,4 +1,5 @@
 import QtQuick 1.0
+import Qt.labs.toucharea 1.0
 
 Rectangle {
     id:pieMenu
@@ -7,6 +8,7 @@ Rectangle {
     color: "#00000000"
     signal sToolsText()
     signal sInsertPicture()
+    signal sFreehand()
     Angulo{
         id: mTools
         x: -475
@@ -65,7 +67,6 @@ Rectangle {
             smEditX.state = ""
         }
     }
-
     Angulo {
         id: mNavigation
         x: -475
@@ -85,7 +86,6 @@ Rectangle {
             smNavigationX.state = ""
         }
     }
-
     Angulo {
         id: mSession
         x: -476
@@ -125,7 +125,7 @@ Rectangle {
             smHelpX.state = ""
         }
     }
-
+//}
     states: [
         State {
             name: "stateTools"
@@ -443,6 +443,7 @@ Rectangle {
         visible: false
         opacity: 0
         onSToolsText: parent.sToolsText()
+        onSToolsFreehand: parent.sFreehand()
     }
 
     SubmenuInsert{
