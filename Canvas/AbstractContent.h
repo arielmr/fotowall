@@ -107,6 +107,7 @@ class AbstractContent : public AbstractDisposeable
         void requestBackgrounding();
         void requestConfig(const QPoint & scenePoint);
         void requestEditing();
+        void requestNestedCanvas(QString name);
         void requestRemoval();
         void contentChanged();
 
