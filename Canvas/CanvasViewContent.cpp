@@ -22,12 +22,16 @@
 #include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
-
+#include <QDebug>
 CanvasViewContent::CanvasViewContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem * parent)
     : AbstractContent(scene, spontaneous, false, parent)
     , m_canvas(0)
     , m_canvasTaken(false)
 {
+    // create a Canvas
+    Canvas * canvas = new Canvas(96, 96, this);
+    connect(canvas, SIGNAL(changed(const QList<QRectF> &)), this, SLOT(slotRepaintCanvas(const QList<QRectF> &)));
+    m_canvas = canvas;
 }
 
 CanvasViewContent::~CanvasViewContent()
@@ -39,14 +43,17 @@ CanvasViewContent::~CanvasViewContent()
 
 bool CanvasViewContent::loadFromFile(const QString & fwFilePath, bool /*keepRatio*/, bool setName)
 {
-    // create a Canvas
-    Canvas * canvas = new Canvas(96, 96, this);
-    connect(canvas, SIGNAL(changed(const QList<QRectF> &)), this, SLOT(slotRepaintCanvas(const QList<QRectF> &)));
-    bool ok = FotowallFile::read(fwFilePath, canvas, false);
-    canvas->resizeAutoFit();
+    if (!m_canvas){
+        qWarning()<< "m_canvas is zero, something very wrong happened";
+        return false;
+    }
+    // load fotowall file into canvas
+
+    bool ok = FotowallFile::read(fwFilePath, m_canvas, false);
+    m_canvas->resizeAutoFit();
 
     // set the canvas
-    m_canvas = canvas;
+
     m_canvas->setEmbeddedPainting(true);
     m_canvasCachedSize = m_canvas->sceneSize();
     resizeContents(contentRect(), true);
