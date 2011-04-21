@@ -79,15 +79,12 @@ Item {
 
         // We are not accepting events if there are more than 2 touch points.
         minimumTouches: 1
-        maximumTouches: 1
+        maximumTouches: 50
 
         touchPoints: [
-            TouchPoint { id: tp1 },
-            TouchPoint { id: tp2 }
+            TouchPoint { id: tp1 }
         ]
         onTouchStart: {
-            //            console.log("Touches.length:", touches.length, "changedTouches.length:", changedTouches.length)
-            //            console.log("ID:", tp1.id, "sX", tp1.sceneX, "sY", tp1.sceneY);
             if (parent.state == ""){
                 parent.state = "State1"
                 anguloMain.clic()

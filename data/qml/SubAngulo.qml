@@ -75,19 +75,19 @@ Item {
         anchors.fill: parent
         // We are not accepting events if there are more than 2 touch points.
         minimumTouches: 1
-        maximumTouches: 1
+        maximumTouches: 10
 
         touchPoints: [
-            TouchPoint { id: tp1 },
-            TouchPoint { id: tp2 }
+            TouchPoint { id: tp1 }
         ]
         onTouchStart: {
             parent.state = "State1"
             anguloMain.clic()
+            anguloMain.rele()
         }
         onTouchEnd: {
             parent.state = ""
-            anguloMain.rele()
+
         }
     }
     states: [
