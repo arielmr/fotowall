@@ -21,6 +21,7 @@
 class CPixmap : public QPixmap {
 public:
    CPixmap();
+   CPixmap(int w, int h);
    CPixmap(const QString &filePath);
    CPixmap(const QImage &image);
 

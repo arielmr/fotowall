@@ -19,7 +19,9 @@
 
 CPixmap::CPixmap() {
 }
-
+CPixmap::CPixmap(int w, int h):QPixmap(w,h){
+    this->fill(Qt::transparent);
+}
 CPixmap::CPixmap(const QString &filePath) : QPixmap(filePath), m_filePath(filePath) {
 }
 
