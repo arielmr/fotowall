@@ -709,9 +709,13 @@ bool AbstractContent::sceneEvent(QEvent *event)
         return gestureEvent(static_cast<QGestureEvent*>(event));
     switch (event->type()) {
          case QEvent::TouchBegin:
+         {
+            setSelected(true);
+         }
          case QEvent::TouchUpdate:
          case QEvent::TouchEnd:
          {
+            setSelected(false);
              QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
              foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
                  switch (touchPoint.state()) {
@@ -735,8 +739,9 @@ bool AbstractContent::gestureEvent(QGestureEvent* event)
 {
     if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
         pinchGesture(static_cast<QPinchGesture *>(pinch));
+        return true;
     }
-
+    return false;
 }
 void AbstractContent::pinchGesture(QPinchGesture* gesture){
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
@@ -755,7 +760,8 @@ void AbstractContent::pinchGesture(QPinchGesture* gesture){
 //        currentStepScaleFactor = 1;
     }
     if (changeFlags & QPinchGesture::CenterPointChanged) {
-        this->setPos(gesture->centerPoint());
+        this->setPos(gesture->centerPoint()-
+                     QPointF(boundingRect().width()/2.0, boundingRect().height()/2.0) );
     }
     update();
 }
