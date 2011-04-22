@@ -712,6 +712,7 @@ bool AbstractContent::sceneEvent(QEvent *event)
          case QEvent::TouchBegin:
          {
             setSelected(true);
+            event->accept();
          }
          case QEvent::TouchUpdate:
          case QEvent::TouchEnd:
@@ -732,9 +733,9 @@ bool AbstractContent::sceneEvent(QEvent *event)
              break;
          }
          default:
-             return QGraphicsItem::sceneEvent(event);
+            break;
          }
-         return true;
+         return QGraphicsItem::sceneEvent(event);
 }
 bool AbstractContent::gestureEvent(QGestureEvent* event)
 {
