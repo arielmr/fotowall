@@ -41,7 +41,7 @@ class CornerItem : public QGraphicsItem
             FixRotate   = 0x0002,
             Scale       = 0x0010,
             FixScale    = 0x0020,
-            AllowAll    = 0xFFFF,
+            AllowAll    = 0xFFFF
         };
         AbstractContent * m_content;
         Qt::Corner m_corner;
