@@ -25,7 +25,7 @@ SubAngulo {
         rotation: 45
         label: "Text"
         onClic: {
-            console.log("SubMenu Text clicked!")
+            //console.log("SubMenu Text clicked!")
             parent.state = "toolsAbierto"
             parent.sToolsText()
         }
@@ -42,7 +42,7 @@ SubAngulo {
         rotation: 45
         label: "Freehand"
         onClic: {
-            console.log("SubMenu Freehand clicked!")
+            //console.log("SubMenu Freehand clicked!")
             parent.state = "toolsAbierto"
             parent.sToolsFreehand()
         }
@@ -60,7 +60,7 @@ SubAngulo {
         rotation: 45
         label: "Eraser"
         onClic: {
-            console.log("SubMenu Eraser clicked!")
+            //console.log("SubMenu Eraser clicked!")
             parent.state = "toolsAbierto"
             parent.sToolsEraser()
         }
@@ -78,7 +78,7 @@ SubAngulo {
         rotation: 45
         label: "Find"
         onClic: {
-            console.log("SubMenu Find clicked!")
+            //console.log("SubMenu Find clicked!")
             parent.state = "toolsAbierto"
             parent.sToolsFind()
         }

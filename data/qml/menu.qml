@@ -19,12 +19,12 @@ Rectangle {
         scale: 0.4
         label: "Tools"
         onClic: {
-            console.log("Menu Tools clicked!")
+            //console.log("Menu Tools clicked!")
             parent.state = "stateTools"
             smToolsX.state = "toolsAbierto"
         }
         onRele: {
-            console.log("Menu Tools clicked!")
+            //console.log("Menu Tools clicked!")
             parent.state = ""
             smToolsX.state = ""
         }
@@ -38,12 +38,12 @@ Rectangle {
         rotation: 30
         label: "Insert"
         onClic: {
-            console.log("Menu Insert clicked!")
+            //console.log("Menu Insert clicked!")
             parent.state = "stateInsert"
             smInsertX.state = "insertAbierto"
         }
         onRele: {
-            console.log("Menu Insert clicked!")
+            //console.log("Menu Insert clicked!")
             parent.state = ""
             smInsertX.state = ""
         }
@@ -57,12 +57,12 @@ Rectangle {
         scale: 0.4
         rotation: 15
         onClic: {
-            console.log("Menu Edit clicked!")
+            //console.log("Menu Edit clicked!")
             parent.state = "stateEdit"
             smEditX.state = "editAbierto"
         }
         onRele: {
-            console.log("Menu Edit clicked!")
+            //console.log("Menu Edit clicked!")
             parent.state = ""
             smEditX.state = ""
         }
@@ -76,12 +76,12 @@ Rectangle {
         scale: 0.4
         rotation: 0
         onClic: {
-            console.log("Menu Navigation clicked!")
+            //console.log("Menu Navigation clicked!")
             parent.state = "stateNavigation"
             smNavigationX.state = "navigationAbierto"
         }
         onRele: {
-            console.log("Menu Navigation clicked!")
+            //console.log("Menu Navigation clicked!")
             parent.state = ""
             smNavigationX.state = ""
         }
@@ -96,12 +96,12 @@ Rectangle {
         rotation: -15
         label: "Session"
         onClic: {
-            console.log("Menu File clicked!")
+            //console.log("Menu File clicked!")
             parent.state = "stateSession"
             smSessionX.state = "sessionAbierto"
         }
         onRele: {
-            console.log("Menu File clicked!")
+            //console.log("Menu File clicked!")
             parent.state = ""
             smSessionX.state = ""
         }
@@ -115,12 +115,12 @@ Rectangle {
         scale: 0.4
         rotation: -30
         onClic: {
-            console.log("Menu Help clicked!")
+            //console.log("Menu Help clicked!")
             parent.state = "stateHelp"
             smHelpX.state = "helpAbierto"
         }
         onRele: {
-            console.log("Menu Help released!")
+            //console.log("Menu Help released!")
             parent.state = ""
             smHelpX.state = ""
         }
@@ -430,10 +430,6 @@ Rectangle {
         x: 119
         y: 117
         opacity: 0        
-//        onsToolsText: console.log("asd")
-//        signal sToolsFreehand()
-//        signal sToolsEraser()
-//        signal sToolsFind()
     }
 
     SubmenuTools{

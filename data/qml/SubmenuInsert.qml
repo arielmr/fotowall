@@ -24,7 +24,7 @@ SubAngulo {
         rotation: 45
         label: "Picture"
         onClic: {
-            console.log("SubMenu Picture clicked!")
+            //console.log("SubMenu Picture clicked!")
             parent.state = "insertAbierto"
             parent.sInsertPicture()
         }
@@ -42,7 +42,7 @@ SubAngulo {
         rotation: 45
         label: "Table"
         onClic: {
-            console.log("SubMenu Table clicked!")
+            //console.log("SubMenu Table clicked!")
             parent.state = "insertAbierto"
             parent.sInsertTable()
         }
@@ -60,7 +60,7 @@ SubAngulo {
         rotation: 45
         label: "Speech"
         onClic: {
-            console.log("SubMenu SpeechToText clicked!")
+            //console.log("SubMenu SpeechToText clicked!")
             parent.state = "insertAbierto"
             parent.sInsertSpeechToText()
         }
@@ -78,7 +78,7 @@ SubAngulo {
         rotation: 45
         label: "File"
         onClic: {
-            console.log("SubMenu File clicked!")
+            //console.log("SubMenu File clicked!")
             parent.state = "insertAbierto"
             parent.sInsertFile()
         }
@@ -96,7 +96,7 @@ SubAngulo {
         rotation: 45
         label: "Object"
         onClic: {
-            console.log("SubMenu Object clicked!")
+            //console.log("SubMenu Object clicked!")
             parent.state = "insertAbierto"
             parent.sInsertObject()
         }
