@@ -315,14 +315,10 @@ void Workflow::pushNode(const Node & node)
         node.appliance->addToApplianceContainer(m_container);
     updateBreadcrumb();
     if (CanvasAppliance * canvasApp = dynamic_cast<CanvasAppliance *>(node.appliance)) {
-        qDebug() << "Es un canvas";
         if (m_sceneView){
-            qDebug() << "Connecting";
+//            qDebug() << __FILE__<< __LINE__<< "Connecting touch showMenu signal/slot for new Appliance";
             connect(this->m_sceneView, SIGNAL(showMenu(QPointF)), canvasApp, SLOT(slotShowMenu(QPointF)));
         }
-    }
-    else{
-        qDebug() << "NO es un canvas";
     }
 }
 
