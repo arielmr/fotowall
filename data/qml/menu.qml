@@ -1,5 +1,4 @@
 import QtQuick 1.0
-import Qt.labs.toucharea 1.0
 
 Rectangle {
     id:pieMenu
@@ -9,6 +8,15 @@ Rectangle {
     signal sToolsText()
     signal sInsertPicture()
     signal sFreehand()
+    CirclePro{
+        x: 361
+        y: 235
+        width: 180
+        height: 244
+        z: 10
+        scale: 0.7
+        smooth: true
+    }
     Angulo{
         id: mTools
         x: -475
