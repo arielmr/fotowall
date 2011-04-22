@@ -108,8 +108,6 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
     QDeclarativeEngine *engine = new QDeclarativeEngine;
 
     engine->setBaseUrl(QUrl("qrc:/qml/data/qml/"));
-//    engine->addImportPath("qrc:/qml/data/qml/imports/");
-//    engine->addImportPath("/home/itai/git/projects/fotowall/data/qml/imports/");
     engine->addImportPath("/home/itai/git/qml-toucharea/TouchArea-build-desktop/imports/");
 
     QDeclarativeComponent component(engine, QUrl("qrc:/qml/data/qml/menu.qml"));
@@ -119,12 +117,14 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
 
     m_menu = qobject_cast<QGraphicsObject *>(component.create());
     m_menu->setAcceptTouchEvents(true);
+    m_extCanvas->addItem(m_menu);
+    m_menu->hide();
 
     connect(m_menu, SIGNAL(sToolsText()), this, SLOT(slotAddText()));
     connect(m_menu, SIGNAL(sInsertPicture()), this, SLOT(slotAddPicture()));
     connect(m_menu, SIGNAL(sFreehand()), this, SLOT(slotAddFingerPaint()));
 
-    m_finger= new QGraphicsEllipseItem(-10,-10,20,20, 0, 0);
+    m_finger = new QGraphicsEllipseItem(-10,-10,20,20, 0, 0);
     m_extCanvas->addItem(m_finger);
 }
 
@@ -139,6 +139,9 @@ CanvasAppliance::~CanvasAppliance()
     delete m_dummyWidget;
     if (m_menu)
         delete m_menu;
+    if (m_finger)
+        delete m_finger;
+//    qDebug()<< "CanvasAppliance DTOR";
 }
 
 Canvas * CanvasAppliance::takeCanvas()
@@ -434,12 +437,14 @@ void CanvasAppliance::slotAddPicture()
         return;
     App::settings->setValue("Fotowall/LoadImagesDir", QFileInfo(picFilePaths[0]).absolutePath());
     m_extCanvas->addPictureContent(picFilePaths);
+    m_menu->hide();
     setFocusToScene();
 }
 
 void CanvasAppliance::slotAddText()
 {
     m_extCanvas->addTextContent();
+    m_menu->hide();
     setFocusToScene();
 }
 
@@ -447,12 +452,14 @@ void CanvasAppliance::slotAddWebcam()
 {
     int webcamIndex = sender()->property("index").toInt();
     m_extCanvas->addWebcamContent(webcamIndex);
+    m_menu->hide();
     setFocusToScene();
 }
 
 void CanvasAppliance::slotAddWordcloud()
 {
     m_extCanvas->addWordcloudContent();
+    m_menu->hide();
     setFocusToScene();
 }
 void CanvasAppliance::slotAddFingerPaint()
@@ -570,8 +577,10 @@ bool CanvasAppliance::slotFileExport()
 
 void CanvasAppliance::slotEditContent(AbstractContent *content)
 {
+//    qDebug()<< __LINE__<< "CanvasAppliance slotEditContent ";
     // handle Canvas
     if (CanvasViewContent * cvc = dynamic_cast<CanvasViewContent *>(content)) {
+//        qDebug()<< "    CanvasAppliance handling a Canvas";
         App::workflow->stackSlaveCanvas_A(cvc);
         return;
     }
@@ -683,14 +692,10 @@ void CanvasAppliance::slotVerifyVideoInputs(int count)
     }
 }
 void CanvasAppliance::slotShowMenu(QPointF position){
-    static bool a=false;
     m_finger->setPos(position);
-    if (m_extCanvas){
-        if (!a){
-            m_extCanvas->addItem(m_menu);
-            m_menu->setPos(position - QPointF(m_menu->boundingRect().width()/2.0, m_menu->boundingRect().height()/2.0));
-            a=true;
-        }
+    if (m_extCanvas){        
+        m_menu->show();
+//        m_menu->setPos(position - QPointF(m_menu->boundingRect().width()/2.0, m_menu->boundingRect().height()/2.0));
     }
-
+    m_extCanvas->update();
 }
