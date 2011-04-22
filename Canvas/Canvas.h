@@ -48,7 +48,7 @@ class Canvas : public AbstractScene
 
         // add/remove content
         void addAutoContent(const QStringList & filePaths);
-        void addCanvasViewContent(const QStringList & fwFilePaths);
+        CanvasViewContent* addCanvasViewContent(const QStringList & fwFilePaths);
         void addPictureContent(const QStringList & picFilePaths);
         void addTextContent();
         void addWebcamContent(int webcamIndex);
@@ -113,6 +113,7 @@ class Canvas : public AbstractScene
         void requestContentEditing(AbstractContent * content);
         void showPropertiesWidget(QWidget * widget);
         void filePathChanged();
+        void requestPushChildCanvasView(CanvasViewContent* content);
 
     protected:
         void dragEnterEvent( QGraphicsSceneDragDropEvent * event );
@@ -160,6 +161,8 @@ class Canvas : public AbstractScene
         bool m_embeddedPainting;
         bool m_pendingChanges;
 
+//        CanvasViewContent*  m_childCanvas;
+
     private Q_SLOTS:
         friend class AbstractConfig; // HACK here, only to call 1 method
         friend class PixmapButton; // HACK here, only to call 1 method
@@ -185,6 +188,8 @@ class Canvas : public AbstractScene
         void slotMarkChanges();
         void slotResetChanges();
         void slotApplyForce();
+
+        void slotNestedCanvas(QString name);
 };
 
 #endif

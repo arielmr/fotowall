@@ -81,8 +81,6 @@ class FingerPaintContent : public AbstractContent
         QTimer *    m_watcherTimer;
         QList<QColor> myPenColors;
 
-        QString     m_nestedCanvasFile;
-
     private Q_SLOTS:
         void slotGimpCompressNotifies();
         void slotGimpFinished();

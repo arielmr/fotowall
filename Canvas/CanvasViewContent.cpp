@@ -33,7 +33,13 @@ CanvasViewContent::CanvasViewContent(bool spontaneous, QGraphicsScene * scene, Q
     connect(canvas, SIGNAL(changed(const QList<QRectF> &)), this, SLOT(slotRepaintCanvas(const QList<QRectF> &)));
     m_canvas = canvas;
 }
-
+CanvasViewContent::CanvasViewContent(Canvas* canvas, QGraphicsScene * scene, QGraphicsItem * parent )
+    : AbstractContent(scene, false, false, parent)
+    , m_canvas(canvas)
+    , m_canvasTaken(false)
+{
+    connect(canvas, SIGNAL(changed(const QList<QRectF> &)), this, SLOT(slotRepaintCanvas(const QList<QRectF> &)));
+}
 CanvasViewContent::~CanvasViewContent()
 {
     if (m_canvasTaken)

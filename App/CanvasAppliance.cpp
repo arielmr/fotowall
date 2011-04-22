@@ -88,6 +88,8 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
     connect(m_extCanvas, SIGNAL(showPropertiesWidget(QWidget*)), this, SLOT(slotShowPropertiesWidget(QWidget*)));
     connect(m_extCanvas, SIGNAL(filePathChanged()), this, SLOT(slotFilePathChanged()));
 
+    connect(m_extCanvas, SIGNAL(requestPushChildCanvasView(CanvasViewContent*)), this, SLOT(slotPushChildCanvasView(CanvasViewContent*)) );
+
     // react to VideoProvider
     slotVerifyVideoInputs(VideoProvider::instance()->inputCount());
     connect(VideoProvider::instance(), SIGNAL(inputCountChanged(int)), this, SLOT(slotVerifyVideoInputs(int)));
@@ -456,9 +458,10 @@ void CanvasAppliance::slotAddWordcloud()
 void CanvasAppliance::slotAddFingerPaint()
 {
     AbstractContent* content = new FingerPaintContent(true, m_extCanvas);
-    content->rotate(45);
+    content->rotate(5);
     m_extCanvas->addManualContent(content, QPoint(113,279));
-    connect (content, SIGNAL(requestNestedCanvas(QString)), m_extCanvas, SLOT(slotNestedCanvas(QString)));
+    connect(content, SIGNAL(requestNestedCanvas(QString)), m_extCanvas, SLOT(slotNestedCanvas(QString)));
+    m_menu->hide();
     setFocusToScene();
 }
 void CanvasAppliance::slotSearchPicturesToggled(bool visible)
@@ -654,7 +657,12 @@ void CanvasAppliance::slotFilePathChanged()
 {
     windowTitleSet(m_extCanvas->prettyBaseName());
 }
-
+void CanvasAppliance::slotPushChildCanvasView(CanvasViewContent *canvas){
+    if (!canvas)
+        return;
+//    qDebug()<< "    CanvasAppliance *pushing* a CanvasViewContent"<< canvas;
+    App::workflow->stackSlaveCanvas_A(canvas);
+}
 void CanvasAppliance::slotVerifyVideoInputs(int count)
 {
     // delete previous buttons

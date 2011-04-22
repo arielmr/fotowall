@@ -49,7 +49,7 @@ FingerPaintContent::FingerPaintContent(bool spontaneous, QGraphicsScene * scene,
     , m_netReply(0)
     , m_watcher(0)
     , m_watcherTimer(0)
-    , m_nestedCanvasFile("")
+//    , m_nestedCanvasFile("")
 {
 
 
@@ -404,7 +404,9 @@ void FingerPaintContent::toXml(QDomElement & contentElement, const QDir & baseDi
 void FingerPaintContent::drawContent(QPainter * painter, const QRect & targetRect, Qt::AspectRatioMode ratio)
 {
 //    qDebug()<< contentRect();
+    painter->setOpacity(0.2);
     painter->drawRect(0,0,contentRect().width(), contentRect().height());
+    painter->setOpacity(1.0);
     painter->drawPixmap(0,0,contentRect().width(), contentRect().height(), *m_photo);
     return;
 
@@ -571,7 +573,7 @@ bool FingerPaintContent::sceneEvent(QEvent *event){
         QList<QTouchEvent::TouchPoint> touchPoints = e->touchPoints();
         QPointF remapFactor (qreal(m_photo->width())  / qreal(contentRect().width()),
                              qreal(m_photo->height()) / qreal(contentRect().height()));
-        qDebug()<< remapFactor;
+//        qDebug()<< remapFactor;
         foreach (QTouchEvent::TouchPoint tp, touchPoints){
             QRectF rect = tp.rect();
             if (rect.isEmpty()) {
@@ -706,6 +708,6 @@ void FingerPaintContent::slotNetworkProgress(qint64 a, qint64 b)
     update();
 }
 void FingerPaintContent::slotDiveIntoNested(){
-    qDebug()<< "Diving into: ["<< m_nestedCanvasFile << "]";
+//    qDebug()<< "Diving into: ["<< m_nestedCanvasFile << "]";
     emit requestNestedCanvas("_");
 }

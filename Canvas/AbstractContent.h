@@ -29,7 +29,8 @@ class QGraphicsTextItem;
 class QPointF;
 class QGestureEvent;
 class QPinchGesture;
-
+class Canvas;
+class CanvasViewContent;
 /// \brief Base class of Canvas Item (with lots of gadgets!)
 class AbstractContent : public AbstractDisposeable
 {
@@ -49,6 +50,8 @@ class AbstractContent : public AbstractDisposeable
         void dispose();
 
         // size
+        // When subclassing AbstractContent for creating new elements,
+        // use contentRect() instead of boundingRect()
         QRect contentRect() const;
         void resizeContents(const QRect & rect, bool keepRatio = false);
         void resetContentsRatio();
@@ -100,6 +103,10 @@ class AbstractContent : public AbstractDisposeable
         virtual bool sceneEvent(QEvent *event);
         virtual bool gestureEvent(QGestureEvent* event);
         virtual void pinchGesture(QPinchGesture* gesture);
+
+        // Hyperlink enablers
+        CanvasViewContent* childCanvasView(){return m_childCanvasView;}
+        void    setChildCanvasView(CanvasViewContent* canvas){ m_childCanvasView = canvas;}
 
     Q_SIGNALS:
         // to canvas
@@ -166,6 +173,8 @@ class AbstractContent : public AbstractDisposeable
 #endif
         int                 m_fxIndex;
 
+        Canvas*             m_extCanvas;
+        CanvasViewContent*  m_childCanvasView;
     private Q_SLOTS:
         void slotSetPerspective(const QPointF & sceneRelPoint, Qt::KeyboardModifiers modifiers);
         void slotClearPerspective();

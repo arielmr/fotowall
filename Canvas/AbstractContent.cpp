@@ -52,6 +52,7 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     , m_transformRefreshTimer(0)
     , m_gfxChangeTimer(0)
     , m_mirrorItem(0)
+    , m_childCanvasView(0)
 #if QT_VERSION < 0x040600
     , m_rotationAngle(0)
 #endif

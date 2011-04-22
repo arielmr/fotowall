@@ -29,6 +29,7 @@
 #include "TextConfig.h"
 #include "WebcamContent.h"
 #include "WordcloudContent.h"
+#include "FingerPaintContent.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QBuffer>
@@ -44,6 +45,8 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QUrl>
+
+#include <QDebug>
 
 #define COLORPICKER_W 200
 #define COLORPICKER_H 150
@@ -61,6 +64,7 @@ Canvas::Canvas(int sDpiX, int sDpiY, QObject *parent)
     , m_forceFieldTimer(0)
     , m_embeddedPainting(false)
     , m_pendingChanges(false)
+//    , m_childCanvas(0)
 {
     // init modeinfo
     m_modeInfo->setScreenDpi(sDpiX, sDpiY);
@@ -156,23 +160,31 @@ void Canvas::addAutoContent(const QStringList & filePaths)
     }
 }
 
-void Canvas::addCanvasViewContent(const QStringList & fwFilePaths)
+CanvasViewContent* Canvas::addCanvasViewContent(const QStringList & fwFilePaths)
 {
     clearSelection();
     int offset = -30 * (fwFilePaths.size() - 1) / 2;
     QPoint pos = visibleCenter() + QPoint(offset, offset);
-    foreach (const QString & localFile, fwFilePaths) {
-        if (!QFile::exists(localFile))
-            continue;
+    if (fwFilePaths.isEmpty()){
+//        qDebug()<< "Creating NEW empty canvas";
+        CanvasViewContent * content = createCanvasView(pos, false);
+        content->setSelected(true);
+        return content;
+    }
+    else{
+        foreach (const QString & localFile, fwFilePaths) {
+            if (!QFile::exists(localFile))
+                continue;
 
-        // create picture and load the file
-        CanvasViewContent * d = createCanvasView(pos, true);
-        if (!d->loadFromFile(localFile, true, true)) {
-            m_content.removeAll(d);
-            delete d;
-        } else {
-            d->setSelected(true);
-            pos += QPoint(30, 30);
+            // create picture and load the file
+            CanvasViewContent * d = createCanvasView(pos, true);
+            if (!d->loadFromFile(localFile, true, true)) {
+                m_content.removeAll(d);
+                delete d;
+            } else {
+                d->setSelected(true);
+                pos += QPoint(30, 30);
+            }
         }
     }
 }
@@ -1558,4 +1570,24 @@ void Canvas::slotApplyForce()
         t->vPos += (vStart + t->vVel) * dT / 2.0;
         t->setPos(t->vPos.x(), t->vPos.y());
     }
+}
+void Canvas::slotNestedCanvas(QString name){
+//    qDebug()<< __FILE__ <<  __LINE__<< "GO TO nested canvas "<< name<< sender();
+    AbstractContent* p = qobject_cast<AbstractContent*> (sender());
+
+    if (!p)
+        return;
+
+    if (!p->childCanvasView()){
+//        qDebug()<< "    CREATING NEW nested canvas "<< name << sender();
+        CanvasViewContent* c = addCanvasViewContent(QStringList::QStringList());
+        c->hide();
+        p->setChildCanvasView(c);
+    }
+    if (!p->childCanvasView())
+        return;
+
+//    qDebug()<< "    EDITING nested canvas "<< name;
+    emit requestPushChildCanvasView(p->childCanvasView());
+//    emit requestContentEditing(p->childCanvasView());
 }

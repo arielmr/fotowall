@@ -22,6 +22,7 @@ class AbstractContent;
 class Canvas;
 class PixmapButton;
 class QGraphicsObject;
+class CanvasViewContent;
 
 class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
 {
@@ -40,6 +41,9 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         bool applianceSave(const QString & filePath = QString());
 
     private:
+        CanvasAppliance (const CanvasAppliance&);           //Disable copy constructors
+        CanvasAppliance& operator=(const CanvasAppliance&); //Disable copy constructors
+
         QMenu * createArrangeMenu();
         QMenu * createBackgroundMenu();
         QMenu * createDecorationMenu();
@@ -95,6 +99,7 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         void slotBackConfigChanged();
         void slotShowPropertiesWidget(QWidget *);
         void slotFilePathChanged();
+        void slotPushChildCanvasView(CanvasViewContent* canvas);
 
         // other actions
         void slotVerifyVideoInputs(int count);
