@@ -38,7 +38,6 @@ Item {
         anchors.rightMargin: 1
         z: -1
 
-
         Image {
             id: hit
             anchors.fill: parent
@@ -70,7 +69,6 @@ Item {
         text: "<------"
     }
 
-
     states: [
         State {
             name: "stateHit"
@@ -94,6 +92,4 @@ Item {
             }
         }
     ]
-
-
 }
