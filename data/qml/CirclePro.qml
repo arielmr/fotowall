@@ -75,10 +75,10 @@ Rectangle {
             State {
                 name: "stateHit"
 
-                PropertyChanges {
-                    target: hit
-                    opacity: 1
-                }
+//                PropertyChanges {
+//                    target: hit
+//                    opacity: 1
+//                }
 
 
                 PropertyChanges {
@@ -117,7 +117,7 @@ Rectangle {
 
                 RotationAnimation {
                     property: "rotation";
-                    duration:  4000
+                    duration:  8000
                     direction: RotationAnimation.Clockwise
                     loops: Animation.Infinite
                 }

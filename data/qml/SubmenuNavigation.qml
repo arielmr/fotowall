@@ -5,7 +5,7 @@ Rectangle {
     width: 450
     height: 300
     color: "transparent"
-    signal sReviewAlignIdeas()
+    signal sReviewAlignCards()
     signal sReviewGoBack()
     signal sReviewGoToCard()
     signal sReviewShowBrick()
@@ -13,20 +13,20 @@ Rectangle {
 
 
 SubAngulo {
-        id: smAlignIdeas
+        id: smAlignCards
         x: -595
         y: 122
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
         rotation: 45
-        label: "Align Ideas"
+        label: "Align Cards"
         onClic: {
-            console.log("SubMenu AlignIdeas clicked!")
+            console.log("SubMenu AlignCards clicked!")
             parent.state = "navigationAbierto"
-            parent.sReviewAlignIdeas()
+            parent.sReviewAlignCards()
         }
     }
 
@@ -35,7 +35,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -53,7 +53,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -72,7 +72,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -91,7 +91,7 @@ SubAngulo {
             name: "navigationAbierto"
 
             PropertyChanges {
-                target: smAlignIdeas
+                target: smAlignCards
                 x: -594
                 y: 118
                 opacity: 1

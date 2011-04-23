@@ -4,20 +4,38 @@ Rectangle {
     id: rectangle1
     width: 450
     height: 300
-    color: "transparent"
+    color: "#00000000"
+    signal sInsertText()
     signal sInsertPicture()
     signal sInsertTable()
     signal sInsertSpeechToText()
     signal sInsertFile()
     signal sInsertObject()
 
+    SubAngulo {
+            id: smText
+            x: -595
+            y: 122
+            opacity: 0.3
+            visible: false
+            labelScale: 0.8
+            transformOrigin: Item.Right
+            scale: 0.4
+            rotation: 45
+            label: "Text"
+            onClic: {
+                //console.log("SubMenu Text clicked!")
+                parent.state = "insertAbierto"
+                parent.sInsertText()
+            }
+        }
 
 SubAngulo {
         id: smPicture
         x: -595
         y: 122
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -35,7 +53,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -53,7 +71,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -71,7 +89,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -89,7 +107,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -108,11 +126,19 @@ SubAngulo {
             name: "insertAbierto"
 
             PropertyChanges {
+                target: smText
+                x: -594
+                y: 120
+                opacity: 1
+                rotation: 30
+                visible: true
+            }
+            PropertyChanges {
                 target: smPicture
                 x: -594
                 y: 118
                 opacity: 1
-                rotation: 30
+                rotation: 15
                 visible: true
             }
 
@@ -121,7 +147,7 @@ SubAngulo {
                 x: -595
                 y: 115
                 opacity: 1
-                rotation: 15
+                rotation: 0
                 visible: true
             }
 
@@ -130,7 +156,7 @@ SubAngulo {
                 x: -595
                 y: 112
                 opacity: 1
-                rotation: 0
+                rotation: -15
                 visible: true
             }
             PropertyChanges {
@@ -138,7 +164,7 @@ SubAngulo {
                 x: -595
                 y: 110
                 opacity: 1
-                rotation: -15
+                rotation: -30
                 visible: true
             }
             PropertyChanges {
@@ -146,7 +172,7 @@ SubAngulo {
                 x: -595
                 y: 107
                 opacity: 1
-                rotation: -30
+                rotation: -45
                 visible: true
             }
 

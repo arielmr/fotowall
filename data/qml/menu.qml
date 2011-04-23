@@ -5,45 +5,26 @@ Rectangle {
     width: 800
     height: 600
     color: "#00000000"
-    signal sToolsText()
+    signal sInsertText()
     signal sInsertPicture()
     signal sFreehand()
+
     CirclePro{
         x: 361
-        y: 235
+        y: 238
         width: 180
         height: 244
         z: 10
         scale: 0.7
         smooth: true
     }
-    Angulo{
-        id: mTools
-        x: -475
-        y: 240
-        labelScale: 1
-        transformOrigin: Item.Right
-        rotation: 45
-        scale: 0.4
-        label: "Tools"
-        onClic: {
-            //console.log("Menu Tools clicked!")
-            parent.state = "stateTools"
-            smToolsX.state = "toolsAbierto"
-        }
-        onRele: {
-            //console.log("Menu Tools clicked!")
-            parent.state = ""
-            smToolsX.state = ""
-        }
-    }
     Angulo {
         id: mInsert
-        x: -475
-        y: 239
+        x: -477
+        y: 242
         transformOrigin: Item.Right
         scale: 0.4
-        rotation: 30
+        rotation: 45
         label: "Insert"
         onClic: {
             //console.log("Menu Insert clicked!")
@@ -56,29 +37,50 @@ Rectangle {
             smInsertX.state = ""
         }
     }
+    Angulo{
+        id: mDraw
+        x: -476
+        y: 239
+        labelScale: 1
+        transformOrigin: Item.Right
+        rotation: 30
+        scale: 0.4
+        label: "Draw"
+        onClic: {
+            //console.log("Menu Draw clicked!")
+            parent.state = "stateDraw"
+            smDrawX.state = "drawAbierto"
+        }
+        onRele: {
+            //console.log("Menu Draw clicked!")
+            parent.state = ""
+            smDrawX.state = ""
+        }
+    }
+
     Angulo {
-        id: mEdit
+        id: mAction
         x: -474
         y: 237
         transformOrigin: Item.Right
-        label: "Edit"
+        label: "Action"
         scale: 0.4
         rotation: 15
         onClic: {
-            //console.log("Menu Edit clicked!")
-            parent.state = "stateEdit"
-            smEditX.state = "editAbierto"
+            //console.log("Menu Action clicked!")
+            parent.state = "stateAction"
+            smActionX.state = "actionAbierto"
         }
         onRele: {
-            //console.log("Menu Edit clicked!")
+            //console.log("Menu Action clicked!")
             parent.state = ""
-            smEditX.state = ""
+            smActionX.state = ""
         }
     }
     Angulo {
         id: mNavigation
-        x: -475
-        y: 235
+        x: -474
+        y: 234
         transformOrigin: Item.Right
         label: "Navigate"
         scale: 0.4
@@ -96,8 +98,8 @@ Rectangle {
     }
     Angulo {
         id: mSession
-        x: -476
-        y: 233
+        x: -475
+        y: 232
         labelScale: 1
         transformOrigin: Item.Right
         scale: 0.4
@@ -117,7 +119,7 @@ Rectangle {
     Angulo {
         id: mHelp
         x: -476
-        y: 231
+        y: 230
         transformOrigin: Item.Right
         label: "Help"
         scale: 0.4
@@ -136,14 +138,14 @@ Rectangle {
 //}
     states: [
         State {
-            name: "stateTools"
+            name: "stateDraw"
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 1
             }
             PropertyChanges {
-                target: smToolsX
+                target: smDrawX
                 visible: true
                 z: 1
                 opacity: 1
@@ -161,7 +163,7 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 x: -473
                 y: 236
                 rotation: 45
@@ -183,7 +185,7 @@ Rectangle {
             name: "stateInsert"
 
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 0
             }
@@ -196,19 +198,23 @@ Rectangle {
 
             PropertyChanges {
                 target: mInsert
+                x: -478
+                y: 234
                 rotation: 45
                 opacity: 1
             }
 
             PropertyChanges {
                 target: smInsertX
+                x: 119
+                y: 114
                 visible: true
                 z: 1
                 opacity: 1
             }
 
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 rotation: 45
                 opacity: 0
             }
@@ -224,14 +230,14 @@ Rectangle {
             }
         },
         State {
-            name: "stateEdit"
+            name: "stateAction"
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 rotation: 45
                 opacity: 1
             }
             PropertyChanges {
-                target: smEditX
+                target: smActionX
                 visible: true
                 z: 1
                 opacity: 1
@@ -245,13 +251,13 @@ Rectangle {
 
             PropertyChanges {
                 target: mInsert
-                label: Edit
+                label: Action
                 rotation: 45
                 opacity: 0
             }
 
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 0
             }
@@ -269,7 +275,7 @@ Rectangle {
             }
 
 //            PropertyChanges {
-//                target: mTools
+//                target: mDraw
 //                rotation: 45
 //                opacity: 0
 //            }
@@ -278,6 +284,8 @@ Rectangle {
             name: "stateNavigation"
             PropertyChanges {
                 target: mNavigation
+                x: -476
+                y: 237
                 rotation: 45
                 opacity: 1
             }
@@ -296,13 +304,15 @@ Rectangle {
 
             PropertyChanges {
                 target: mInsert
+                x: -477
+                y: 242
                 label: "Insert"
                 rotation: 45
                 opacity: 0
             }
 
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 rotation: 45
                 opacity: "0"
             }
@@ -315,7 +325,7 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 0
             }
@@ -323,7 +333,7 @@ Rectangle {
         State {
             name: "stateSession"
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 0
             }
@@ -347,7 +357,7 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 rotation: 45
                 opacity: 0
             }
@@ -360,7 +370,7 @@ Rectangle {
 
 
             PropertyChanges {
-                target: smToolsX
+                target: smDrawX
                 visible: false
                 opacity: 1
             }
@@ -413,7 +423,7 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: mEdit
+                target: mAction
                 rotation: 45
                 opacity: "0"
             }
@@ -426,7 +436,7 @@ Rectangle {
             }
 
             PropertyChanges {
-                target: mTools
+                target: mDraw
                 rotation: 45
                 opacity: 0
             }
@@ -440,14 +450,14 @@ Rectangle {
         opacity: 0        
     }
 
-    SubmenuTools{
-        id: smToolsX
+    SubmenuDraw{
+        id: smDrawX
         x: 119
         y: 117
         visible: false
         opacity: 0
-        onSToolsText: parent.sToolsText()
-        onSToolsFreehand: parent.sFreehand()
+
+        onSDrawFreehand: parent.sFreehand()
     }
 
     SubmenuInsert{
@@ -456,10 +466,11 @@ Rectangle {
         y: 117
         visible: false
         opacity: 0
+        onSInsertText: parent.sInsertText()
         onSInsertPicture: parent.sInsertPicture()
     }
-    SubmenuEdit{
-        id: smEditX
+    SubmenuAction{
+        id: smActionX
         x: 119
         y: 117
         visible: false

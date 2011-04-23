@@ -4,9 +4,9 @@ Rectangle {
     id: rectangle1
     width: 450
     height: 300
-    color: "transparent"
+    color: "#3c1010"
     signal sHelpGestures()
-    signal sHelpCollaboration()
+    signal sHelpIdeas()
 
 
 
@@ -16,7 +16,7 @@ SubAngulo {
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
@@ -30,20 +30,20 @@ SubAngulo {
     }
 
 SubAngulo {
-        id: smCollaboration
+        id: smIdeas
         x: -595
         y: 120
         opacity: 0.3
-        visible: true
+        visible: false
         labelScale: 0.8
         transformOrigin: Item.Right
         scale: 0.4
         rotation: 45
-        label: "Collaboration"
+        label: "Ideas"
         onClic: {
-            console.log("SubMenu Collaboration clicked!")
+            console.log("SubMenu Ideas clicked!")
             parent.state = "helpAbierto"
-            parent.sHelpCollaboration()
+            parent.sHelpIdeas()
         }
     }
 
@@ -59,16 +59,16 @@ SubAngulo {
             PropertyChanges {
                 target: smGestures
                 x: -595
-                y: 115
+                y: 112
                 opacity: 1
                 rotation: 30
                 visible: true
             }
 
             PropertyChanges {
-                target: smCollaboration
+                target: smIdeas
                 x: -595
-                y: 112
+                y: 109
                 opacity: 1
                 rotation: 15
                 visible: true
@@ -78,6 +78,8 @@ SubAngulo {
             PropertyChanges {
                 target: rectangle1
                 height: 400
+                color: "#00641b1b"
+                radius: 0
             }
         }
     ]
