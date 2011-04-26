@@ -502,11 +502,18 @@ Rectangle {
         }
     }
 
-    Close {
-        id: close1
-        x: 654
-        y: 6
+    Exit {
+        id: exit1
+        x: 604
+        y: 5
+
+        onShiftSpecial:{
+                parent.state = "invisible"
+        }
+
     }
+
+
 
 
     states: [
@@ -673,10 +680,178 @@ Rectangle {
                 visible: false
             }
 
+            PropertyChanges {
+                target: keyboard
+                visible: true
+            }
 
 
 
 
+
+        },
+        State {
+            name: "invisible"
+            PropertyChanges {
+                target: key1
+                keyLabel: "1"
+            }
+
+            PropertyChanges {
+                target: key6
+                keyLabel: "2"
+            }
+
+            PropertyChanges {
+                target: key7
+                keyLabel: "3"
+            }
+
+            PropertyChanges {
+                target: key8
+                keyLabel: "4"
+            }
+
+            PropertyChanges {
+                target: key9
+                keyLabel: "5"
+            }
+
+            PropertyChanges {
+                target: key10
+                keyLabel: "6"
+            }
+
+            PropertyChanges {
+                target: key11
+                keyLabel: "7"
+            }
+
+            PropertyChanges {
+                target: key3
+                keyLabel: "8"
+            }
+
+            PropertyChanges {
+                target: key12
+                keyLabel: "9"
+            }
+
+            PropertyChanges {
+                target: key13
+                keyLabel: "0"
+            }
+
+            PropertyChanges {
+                target: key14
+                keyLabel: "-"
+            }
+
+            PropertyChanges {
+                target: key15
+                keyLabel: "/"
+            }
+
+            PropertyChanges {
+                target: key16
+                keyLabel: ":"
+            }
+
+            PropertyChanges {
+                target: key17
+                keyLabel: ";"
+            }
+
+            PropertyChanges {
+                target: key18
+                keyLabel: "("
+            }
+
+            PropertyChanges {
+                target: key19
+                keyLabel: ")"
+            }
+
+            PropertyChanges {
+                target: key20
+                keyLabel: "&"
+            }
+
+            PropertyChanges {
+                target: key4
+                keyLabel: "@"
+            }
+
+            PropertyChanges {
+                target: key21
+                keyLabel: "."
+            }
+
+            PropertyChanges {
+                target: key22
+                keyLabel: ","
+            }
+
+            PropertyChanges {
+                target: key23
+                keyLabel: "'"
+            }
+
+            PropertyChanges {
+                target: key24
+                keyLabel: "\""
+            }
+
+            PropertyChanges {
+                target: key5
+                keyLabel: " ?"
+            }
+
+            PropertyChanges {
+                target: key26
+                x: "86"
+                y: "75"
+                keyLabel: "<"
+            }
+
+            PropertyChanges {
+                target: changekeyboard1
+            }
+
+            PropertyChanges {
+                target: text1
+                text: "ABC"
+            }
+
+            PropertyChanges {
+                target: key25
+                keyLabel: " !"
+            }
+
+            PropertyChanges {
+                target: key27
+                keyLabel: ">"
+            }
+
+            PropertyChanges {
+                target: key28
+                keyLabel: "["
+            }
+
+            PropertyChanges {
+                target: key29
+                keyLabel: "]"
+            }
+
+            PropertyChanges {
+                target: capskey1
+                visible: "false"
+            }
+
+            PropertyChanges {
+                target: keyboard
+                visible: false
+            }
         }
     ]
 
