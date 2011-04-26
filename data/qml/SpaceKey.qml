@@ -4,10 +4,14 @@ Item {
     id: keyboardKey
     width: 500
     height: 100
+    signal click()
 
     MouseArea{
         anchors.fill: parent
-        onPressed: parent.state = "stateHit"
+        onPressed: {
+            parent.state = "stateHit"
+            parent.click()
+        }
         onReleased: parent.state = ""
     }
     Rectangle {
@@ -27,7 +31,7 @@ Item {
             fillMode: Image.PreserveAspectFit
             smooth: true
             opacity: 0
-            source: "../../../../Users/hp/Documents/UDLAP 3er/Tesis/Imagenes/digital-fingerprintgreen.png"
+            source: "images/digital-fingerprintgreen.png"
             Behavior on opacity{
                 NumberAnimation{
                     duration: 800

@@ -45,7 +45,7 @@ Item {
             fillMode: Image.PreserveAspectFit
             smooth: true
             opacity: 0
-            source: "../../../../Users/hp/Documents/UDLAP 3er/Tesis/Imagenes/digital-fingerprintgreen.png"
+            source: "images/digital-fingerprintgreen.png"
             Behavior on opacity{
                 NumberAnimation{
                     duration: 800
@@ -65,7 +65,7 @@ Item {
         //text: ".?123"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 30
+        font.pixelSize: 25
         color: "#01beaf"
     }
 

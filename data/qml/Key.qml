@@ -4,14 +4,23 @@ Rectangle {
     id: keyboardKey
     width: 100
     height: 100
-    color: "#0c0c0c"
+    color: "#0c0c0c00"
     property alias keyLabel: key.text
 
-    signal clic()
-    signal letterClicked(string Label)
-    signal letterReleased()
-
-
+    signal clicked()
+    MouseArea{
+        anchors.fill: parent
+        onPressed: {
+            parent.state = "stateHit"
+        }
+        onReleased:{
+            parent.state = ""
+        }
+        onClicked: {
+//            console.log (keyLabel)
+            parent.clicked()
+        }
+    }
     Image {
         id: hit
         x: 0
@@ -19,7 +28,7 @@ Rectangle {
         width: 100
         height: 100
         opacity: 0.0
-        source: "../../../../Users/hp/Documents/UDLAP 3er/Tesis/Imagenes/digital-fingerprintgreen.png"
+        source: "images/digital-fingerprintgreen.png"
         Behavior on opacity{
             NumberAnimation{
                 duration: 800
@@ -40,20 +49,7 @@ Rectangle {
         font.pixelSize: 60
         color: "#01beaf"
     }
-    MouseArea{
-        anchors.fill: parent
-        onPressed: {
-            parent.state = "stateHit"
-            console.log (keyLabel)
-            keyboardKey.letterClicked(keyLabel)
-            keyboardKey.clic()
 
-        }
-        onReleased:{
-            parent.state = ""
-            keyboardKey.letterReleased()
-        }
-        }
     states: [
         State {
             name: "stateHit"

@@ -2,7 +2,7 @@ import QtQuick 1.0
 
 Item {
     id: keyboardKey
-    width: 100
+    width: 50
     height: 40
 
     signal shiftSpecial()
@@ -17,11 +17,24 @@ Item {
         anchors.rightMargin: 0
         anchors.bottomMargin: 0
         anchors.fill: parent
-        onPressed: parent.state = "stateHit"
-        onReleased: parent.state = ""
-        onClicked: {
-            keyboardKey.shiftSpecial()
+
+        onClicked: {            
+            if (parent.state == "stateHit"){
+                parent.state = ""
+                parent.shiftSpecial()
+            }
+            else{                
+                parent.state = "stateHit"
+                parent.shiftSpecial()
+            }
+//            parent.shiftSpecial()
         }
+
+
+
+//        onClicked: {
+//            keyboardKey.shiftSpecial()
+//        }
     }
     Rectangle {
         id: rectangle1
@@ -45,7 +58,7 @@ Item {
             fillMode: Image.PreserveAspectFit
             smooth: true
             opacity: 0
-            source: "../../../../Users/hp/Documents/UDLAP 3er/Tesis/Imagenes/digital-fingerprintgreen.png"
+            source: "images/digital-fingerprintgreen.png"
             Behavior on opacity{
                 NumberAnimation{
                     duration: 800
@@ -62,13 +75,18 @@ Item {
         y: 10
         width: 80
         height: 20
-        //text: ".?123"
+
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 30
+        font.pixelSize: 25
         color: "#01beaf"
-        text: "CAPS"
+        text: "aA"
+        anchors.centerIn: parent
+
+
     }
+
+
 
 
     states: [
@@ -79,17 +97,21 @@ Item {
                 target: hit
                 x: 178
                 y: 0
-                opacity: 1
+                opacity: 0
             }
 
             PropertyChanges {
                 target: rectangle1
+                color: "#01beaf"
                 //color: "#01beaf"
             }
 
+
             PropertyChanges {
                 target: text1
-                text: "CAPS"
+                color: "#ececec"
+                text: "Aa"
+
                 horizontalAlignment: "AlignHCenter"
             }
         }
