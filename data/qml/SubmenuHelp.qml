@@ -4,13 +4,9 @@ Rectangle {
     id: rectangle1
     width: 450
     height: 300
-    color: "#3c1010"
+    color: "#00000000"
     signal sHelpGestures()
     signal sHelpIdeas()
-
-
-
-
 SubAngulo {
         id: smGestures
         x: -595
@@ -28,7 +24,6 @@ SubAngulo {
             parent.sHelpGestures()
         }
     }
-
 SubAngulo {
         id: smIdeas
         x: -595
@@ -46,16 +41,9 @@ SubAngulo {
             parent.sHelpIdeas()
         }
     }
-
-
-
-
     states: [
         State {
             name: "helpAbierto"
-
-
-
             PropertyChanges {
                 target: smGestures
                 x: -595
@@ -72,14 +60,6 @@ SubAngulo {
                 opacity: 1
                 rotation: 15
                 visible: true
-            }
-
-
-            PropertyChanges {
-                target: rectangle1
-                height: 400
-                color: "#00641b1b"
-                radius: 0
             }
         }
     ]

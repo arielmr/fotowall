@@ -1,5 +1,5 @@
 import Qt 4.7
-//import Qt.labs.toucharea 1.0
+import Qt.labs.toucharea 1.0
 Item {
     width:1000
     height:255
@@ -73,28 +73,28 @@ Item {
         }
 
     }
-//    TouchArea {
-//        id:touchArea
-//        anchors.fill: parent
+    TouchArea {
+        id:touchArea
+        anchors.fill: parent
 
-//        // We are not accepting events if there are more than 2 touch points.
-//        minimumTouches: 1
-//        maximumTouches: 50
+        // We are not accepting events if there are more than 2 touch points.
+        minimumTouches: 1
+        maximumTouches: 50
 
-//        touchPoints: [
-//            TouchPoint { id: tp1 }
-//        ]
-//        onTouchStart: {
-//            if (parent.state == ""){
-//                parent.state = "State1"
-//                anguloMain.clic()
-//            }
-//            else{
-//                parent.state = ""
-//                anguloMain.rele()
-//            }
-//        }
-//    }
+        touchPoints: [
+            TouchPoint { id: tp1 }
+        ]
+        onTouchStart: {
+            if (parent.state == ""){
+                parent.state = "State1"
+                anguloMain.clic()
+            }
+            else{
+                parent.state = ""
+                anguloMain.rele()
+            }
+        }
+    }
     states: [
         State {
             name: "State1"
