@@ -2,151 +2,148 @@ import QtQuick 1.0
 
 Rectangle {
     id:keyboard
-    width: 800
-    height: 300
-    color: "#000000"
-
+    width: 660
+    height: 230
+    color: "#80000000"
+    smooth: true
     signal keyboardLetter(string letter)
-
     function myMethod() {
-             console.log("Button was clicked!")
+             keyboard.keyboardLetter("Button was clicked!")
          }
-
     Key {
         id: key1
-        x: 36
-        y: 31
+        x: -17
+        y: -15
         keyLabel: "Q"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("q")
+                keyboard.keyboardLetter("q")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
     Key{
         id: key6
-        x: 86
-        y: 31
+        x: 33
+        y: -15
         keyLabel: "W"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("w")
+                keyboard.keyboardLetter("w")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
 
     }
     Key{
         id: key7
-        x: 136
-        y: 31
+        x: 83
+        y: -15
         keyLabel: "E"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("e")
+                keyboard.keyboardLetter("e")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
-
     }
     Key{
         id: key8
-        x: 186
-        y: 31
+        x: 133
+        y: -15
         keyLabel: "R"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("r")
+                keyboard.keyboardLetter("r")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
     Key {
         id: key11
-        x: 336
-        y: 31
+        x: 283
+        y: -15
         keyLabel: "U"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("u")
+                keyboard.keyboardLetter("u")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key9
-        x: 236
-        y: 31
+        x: 183
+        y: -15
         keyLabel: "T"
         scale: 0.5
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("t")
+                keyboard.keyboardLetter("t")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key10
-        x: 286
-        y: 31
+        x: 233
+        y: -15
         scale: 0.5
         keyLabel: "Y"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("y")
+                keyboard.keyboardLetter("y")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key3
-        x: 386
-        y: 31
+        x: 333
+        y: -15
         scale: 0.5
         keyLabel: "I"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("i")
-            els
-                console.log(keyLabel)
+                keyboard.keyboardLetter("i")
+            else
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key12
-        x: 436
-        y: 31
+        x: 383
+        y: -15
         scale: 0.5
         keyLabel: "O"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("o")
+                keyboard.keyboardLetter("o")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key13
-        x: 486
-        y: 31
+        x: 433
+        y: -15
         scale: 0.5
         keyLabel: "P"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("p")
+                keyboard.keyboardLetter("p")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
@@ -154,299 +151,299 @@ Rectangle {
 
     Key {
         id: key14
-        x: 61
-        y: 81
+        x: 8
+        y: 35
         width: 100
         scale: 0.5
         keyLabel: "A"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("a")
+                keyboard.keyboardLetter("a")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
-        x: 461
-        y: 81
+        x: 408
+        y: 35
         scale: 0.5
         keyLabel: "L"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("l")
+                keyboard.keyboardLetter("l")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
-        x: 511
-        y: 81
+        x: 458
+        y: 35
         scale: 0.5
         keyLabel: ";"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log(";")
+                keyboard.keyboardLetter(";")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key4
-        x: 411
-        y: 81
+        x: 358
+        y: 35
         scale: 0.5;
         keyLabel: "K"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("k")
+                keyboard.keyboardLetter("k")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key17
-        x: 211
-        y: 81
+        x: 158
+        y: 35
         scale: 0.5
         keyLabel: "F"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("f")
+                keyboard.keyboardLetter("f")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key15
-        x: 111
-        y: 81
+        x: 58
+        y: 35
         scale: 0.5
         keyLabel: "S"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("s")
+                keyboard.keyboardLetter("s")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key16
-        x: 161
-        y: 81
+        x: 108
+        y: 35
         scale: 0.5
         keyLabel: "D"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("d")
+                keyboard.keyboardLetter("d")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key19
-        x: 311
-        y: 81
+        x: 258
+        y: 35
         scale: 0.5
         keyLabel: "H"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("h")
+                keyboard.keyboardLetter("h")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key18
-        x: 261
-        y: 81
+        x: 208
+        y: 35
         scale: 0.5
         keyLabel: "G"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("g")
+                keyboard.keyboardLetter("g")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key20
-        x: 361
-        y: 81
+        x: 308
+        y: 35
         scale: 0.5
         keyLabel: "J"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("j")
+                keyboard.keyboardLetter("j")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key28
-        x: 486
-        y: 131
+        x: 433
+        y: 85
         scale: 0.5
         keyLabel: "."
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log(".")
+                keyboard.keyboardLetter(".")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key29
-        x: 536
-        y: 131
+        x: 483
+        y: 85
         scale: 0.5
         keyLabel: "/"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("/")
+                keyboard.keyboardLetter("/")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key5
-        x: 436
-        y: 131
+        x: 383
+        y: 85
         scale: 0.5
         keyLabel: ","
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log(",")
+                keyboard.keyboardLetter(",")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key22
-        x: 236
-        y: 131
+        x: 183
+        y: 85
         scale: 0.5
         keyLabel: "V"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("v")
+                keyboard.keyboardLetter("v")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key27
-        x: 136
-        y: 131
+        x: 83
+        y: 85
         scale: 0.5
         keyLabel: "X"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("x")
+                keyboard.keyboardLetter("x")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key21
-        x: 186
-        y: 131
+        x: 133
+        y: 85
         scale: 0.5
         keyLabel: "C"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("c")
+                keyboard.keyboardLetter("c")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key24
-        x: 336
-        y: 131
+        x: 283
+        y: 85
         scale: 0.5
         keyLabel: "N"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("n")
+                keyboard.keyboardLetter("n")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key23
-        x: 286
-        y: 131
+        x: 233
+        y: 85
         scale: 0.5
         keyLabel: "B"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("b")
+                keyboard.keyboardLetter("b")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key25
-        x: 386
-        y: 131
+        x: 333
+        y: 85
         scale: 0.5
         keyLabel: "M"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("m")
+                keyboard.keyboardLetter("m")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     Key {
         id: key26
-        x: 86
-        y: 131
+        x: 33
+        y: 85
         scale: 0.5
         keyLabel: "Z"
         onClicked: {
             if (capskey1.state=="" && keyboard.state =="")
-                console.log("z")
+                keyboard.keyboardLetter("z")
             else
-                console.log(keyLabel)
+                keyboard.keyboardLetter(keyLabel)
         }
     }
 
     SpaceKey {
         id: spacekey1
-        x: 211
-        y: 220
+        x: 158
+        y: 174
         width: 350
         height: 40
         onClick: {
-            console.log("ESPACIO")
+//            keyboard.keyboardLetter("ESPACIO")
             parent.keyboardLetter(" ")
         }
     }
 
     ChangeKeyboard {
         id: changekeyboard1
-        x: 96
-        y: 220
+        x: 43
+        y: 174
         scale: 1
         onShiftSpecial:{
             if (parent.state == "numeric")
@@ -464,8 +461,8 @@ Rectangle {
 
     Text {
         id: text1
-        x: 107
-        y: 230
+        x: 54
+        y: 184
         width: 80
         height: 20
         color: "#01beaf"
@@ -477,149 +474,114 @@ Rectangle {
 
     IntroKey {
         id: introkey1
-        x: 594
-        y: 111
+        x: 541
+        y: 65
+        onShiftSpecial: {
+            parent.keyboardLetter("INTRO");
+        }
     }
 
     BackSpace {
         id: backspace1
-        x: 568
-        y: 61
-        width: 136
+        x: 509
+        y: 15
+        width: 147
         height: 40
+        onShiftSpecial: {
+            parent.keyboardLetter("BACKSPACE");
+        }
     }
 
     CapsKey {
         id: capskey1
-        x: 620
-        y: 161
+        x: 567
+        y: 115
         onShiftSpecial: {
-//            capskey1.state==""?console.log("CAPS"):console.log("caps")
-            if (capskey1.state=="")
-                console.log("CAPS LOCK")
-            else
-                console.log("caps lock")
+//            if (capskey1.state=="")
+//                keyboard.keyboardLetter("CAPS LOCK")
+//            else
+//                keyboard.keyboardLetter("caps lock")
         }
     }
-
-    Exit {
-        id: exit1
-        x: 604
-        y: 5
-
-        onShiftSpecial:{
-                parent.state = "invisible"
-        }
-
-    }
-
-
-
-
     states: [
         State {
             name: "numeric"
-
-//            PropertyChanges {
-//                target: key2
-//                keyLabel: "1"
-//            }
-
             PropertyChanges {
                 target: key1
                 keyLabel: "1"
             }
-
             PropertyChanges {
                 target: key6
                 keyLabel: "2"
             }
-
             PropertyChanges {
                 target: key7
                 keyLabel: "3"
             }
-
             PropertyChanges {
                 target: key8
                 keyLabel: "4"
             }
-
             PropertyChanges {
                 target: key9
                 keyLabel: "5"
             }
-
             PropertyChanges {
                 target: key10
                 keyLabel: "6"
             }
-
             PropertyChanges {
                 target: key11
                 keyLabel: "7"
             }
-
             PropertyChanges {
                 target: key3
                 keyLabel: "8"
             }
-
             PropertyChanges {
                 target: key12
                 keyLabel: "9"
             }
-
             PropertyChanges {
                 target: key13
                 keyLabel: "0"
             }
-
             PropertyChanges {
                 target: key14
                 keyLabel: "-"
             }
-
             PropertyChanges {
                 target: key15
                 keyLabel: "/"
             }
-
             PropertyChanges {
                 target: key16
                 keyLabel: ":"
             }
-
             PropertyChanges {
                 target: key17
                 keyLabel: ";"
             }
-
             PropertyChanges {
                 target: key18
                 keyLabel: "("
             }
-
             PropertyChanges {
                 target: key19
                 keyLabel: ")"
             }
-
             PropertyChanges {
                 target: key20
                 keyLabel: "&"
             }
-
             PropertyChanges {
                 target: key4
                 keyLabel: "@"
             }
-
             PropertyChanges {
                 target: key21
                 keyLabel: "."
             }
-
             PropertyChanges {
                 target: key22
                 keyLabel: ","
@@ -642,8 +604,6 @@ Rectangle {
 
             PropertyChanges {
                 target: key26
-                x: 86
-                y: 75
                 keyLabel: "<"
             }
             PropertyChanges {
@@ -680,178 +640,14 @@ Rectangle {
                 visible: false
             }
 
-            PropertyChanges {
-                target: keyboard
-                visible: true
-            }
 
 
 
 
 
-        },
-        State {
-            name: "invisible"
-            PropertyChanges {
-                target: key1
-                keyLabel: "1"
-            }
 
-            PropertyChanges {
-                target: key6
-                keyLabel: "2"
-            }
 
-            PropertyChanges {
-                target: key7
-                keyLabel: "3"
-            }
 
-            PropertyChanges {
-                target: key8
-                keyLabel: "4"
-            }
-
-            PropertyChanges {
-                target: key9
-                keyLabel: "5"
-            }
-
-            PropertyChanges {
-                target: key10
-                keyLabel: "6"
-            }
-
-            PropertyChanges {
-                target: key11
-                keyLabel: "7"
-            }
-
-            PropertyChanges {
-                target: key3
-                keyLabel: "8"
-            }
-
-            PropertyChanges {
-                target: key12
-                keyLabel: "9"
-            }
-
-            PropertyChanges {
-                target: key13
-                keyLabel: "0"
-            }
-
-            PropertyChanges {
-                target: key14
-                keyLabel: "-"
-            }
-
-            PropertyChanges {
-                target: key15
-                keyLabel: "/"
-            }
-
-            PropertyChanges {
-                target: key16
-                keyLabel: ":"
-            }
-
-            PropertyChanges {
-                target: key17
-                keyLabel: ";"
-            }
-
-            PropertyChanges {
-                target: key18
-                keyLabel: "("
-            }
-
-            PropertyChanges {
-                target: key19
-                keyLabel: ")"
-            }
-
-            PropertyChanges {
-                target: key20
-                keyLabel: "&"
-            }
-
-            PropertyChanges {
-                target: key4
-                keyLabel: "@"
-            }
-
-            PropertyChanges {
-                target: key21
-                keyLabel: "."
-            }
-
-            PropertyChanges {
-                target: key22
-                keyLabel: ","
-            }
-
-            PropertyChanges {
-                target: key23
-                keyLabel: "'"
-            }
-
-            PropertyChanges {
-                target: key24
-                keyLabel: "\""
-            }
-
-            PropertyChanges {
-                target: key5
-                keyLabel: " ?"
-            }
-
-            PropertyChanges {
-                target: key26
-                x: "86"
-                y: "75"
-                keyLabel: "<"
-            }
-
-            PropertyChanges {
-                target: changekeyboard1
-            }
-
-            PropertyChanges {
-                target: text1
-                text: "ABC"
-            }
-
-            PropertyChanges {
-                target: key25
-                keyLabel: " !"
-            }
-
-            PropertyChanges {
-                target: key27
-                keyLabel: ">"
-            }
-
-            PropertyChanges {
-                target: key28
-                keyLabel: "["
-            }
-
-            PropertyChanges {
-                target: key29
-                keyLabel: "]"
-            }
-
-            PropertyChanges {
-                target: capskey1
-                visible: "false"
-            }
-
-            PropertyChanges {
-                target: keyboard
-                visible: false
-            }
         }
     ]
 

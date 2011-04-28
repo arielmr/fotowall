@@ -1,9 +1,10 @@
 import Qt 4.7
-//import Qt.labs.toucharea 1.0
+import Qt.labs.toucharea 1.0
 
 Item {
     width:1000
     height:255
+    smooth: true
     property alias label: label.text
     property alias labelScale: label.scale
     id: anguloMain
@@ -69,27 +70,37 @@ Item {
             parent.state = ""
             anguloMain.rele()
         }
+
+    TouchArea {
+        id:touchArea
+        x: -2
+        y: 46
+//        width: 729
+//        height: 161
+//        anchors.leftMargin: -1
+//        anchors.topMargin: 46
+//        anchors.bottomMargin: 48
+//        anchors.rightMargin: 272
+        anchors.fill: parent
+        // We are not accepting events if there are more than 2 touch points.
+        minimumTouches: 1
+        maximumTouches: 10
+
+        touchPoints: [
+            TouchPoint { id: tp1 }
+        ]
+        onTouchStart: {
+            parent.state = "State1"
+            anguloMain.clic()
+            anguloMain.rele()
+        }
+        onTouchEnd: {
+            parent.state = ""
+
+        }
     }
-//    TouchArea {
-//        id:touchArea
-//        anchors.fill: parent
-//        // We are not accepting events if there are more than 2 touch points.
-//        minimumTouches: 1
-//        maximumTouches: 10
 
-//        touchPoints: [
-//            TouchPoint { id: tp1 }
-//        ]
-//        onTouchStart: {
-//            parent.state = "State1"
-//            anguloMain.clic()
-//            anguloMain.rele()
-//        }
-//        onTouchEnd: {
-//            parent.state = ""
-
-//        }
-//    }
+    }
     states: [
         State {
             name: "State1"

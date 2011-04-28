@@ -27,6 +27,7 @@ Rectangle {
         y: 0
         width: 100
         height: 100
+        visible: false
         opacity: 0.0
         source: "images/digital-fingerprintgreen.png"
         Behavior on opacity{

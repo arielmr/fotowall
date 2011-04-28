@@ -2,37 +2,41 @@ import QtQuick 1.0
 
 Rectangle {
     id:pieMenu
-    width: 800
+    width: 550
     height: 600
     color: "#00000000"
     signal sInsertText()
     signal sInsertPicture()
     signal sFreehand()
-
+    signal requestCloseMenu()
     CirclePro{
+        id: circlepro1
         x: 361
         y: 238
-        width: 180
+        width: 222
         height: 244
         z: 10
         scale: 0.7
         smooth: true
+        onTriggered: {
+            console.log("Close MENU now!")
+            parent.requestCloseMenu()
+        }
     }
     Angulo {
         id: mInsert
         x: -477
         y: 242
+        smooth: true
         transformOrigin: Item.Right
         scale: 0.4
         rotation: 45
         label: "Insert"
         onClic: {
-            //console.log("Menu Insert clicked!")
             parent.state = "stateInsert"
             smInsertX.state = "insertAbierto"
         }
         onRele: {
-            //console.log("Menu Insert clicked!")
             parent.state = ""
             smInsertX.state = ""
         }
@@ -41,18 +45,17 @@ Rectangle {
         id: mDraw
         x: -476
         y: 239
+        smooth: true
         labelScale: 1
         transformOrigin: Item.Right
         rotation: 30
         scale: 0.4
         label: "Draw"
         onClic: {
-            //console.log("Menu Draw clicked!")
             parent.state = "stateDraw"
             smDrawX.state = "drawAbierto"
         }
         onRele: {
-            //console.log("Menu Draw clicked!")
             parent.state = ""
             smDrawX.state = ""
         }
@@ -67,12 +70,10 @@ Rectangle {
         scale: 0.4
         rotation: 15
         onClic: {
-            //console.log("Menu Action clicked!")
             parent.state = "stateAction"
             smActionX.state = "actionAbierto"
         }
         onRele: {
-            //console.log("Menu Action clicked!")
             parent.state = ""
             smActionX.state = ""
         }
@@ -86,12 +87,10 @@ Rectangle {
         scale: 0.4
         rotation: 0
         onClic: {
-            //console.log("Menu Navigation clicked!")
             parent.state = "stateNavigation"
             smNavigationX.state = "navigationAbierto"
         }
         onRele: {
-            //console.log("Menu Navigation clicked!")
             parent.state = ""
             smNavigationX.state = ""
         }
@@ -106,12 +105,10 @@ Rectangle {
         rotation: -15
         label: "Session"
         onClic: {
-            //console.log("Menu File clicked!")
             parent.state = "stateSession"
             smSessionX.state = "sessionAbierto"
         }
         onRele: {
-            //console.log("Menu File clicked!")
             parent.state = ""
             smSessionX.state = ""
         }
@@ -135,7 +132,6 @@ Rectangle {
             smHelpX.state = ""
         }
     }
-//}
     states: [
         State {
             name: "stateDraw"
@@ -238,8 +234,6 @@ Rectangle {
             }
             PropertyChanges {
                 target: smActionX
-                visible: true
-                z: 1
                 opacity: 1
             }
 
@@ -251,7 +245,6 @@ Rectangle {
 
             PropertyChanges {
                 target: mInsert
-                label: Action
                 rotation: 45
                 opacity: 0
             }
@@ -273,12 +266,6 @@ Rectangle {
                 rotation: 45
                 opacity: 0
             }
-
-//            PropertyChanges {
-//                target: mDraw
-//                rotation: 45
-//                opacity: 0
-//            }
         },
         State {
             name: "stateNavigation"
@@ -387,13 +374,6 @@ Rectangle {
                 y: 239
                 rotation: 45
             }
-
-//            PropertyChanges {
-//                target: smHelpX
-//                visible: false
-//                opacity: 1
-//            }
-
         },
         State {
             name: "stateHelp"
@@ -442,14 +422,12 @@ Rectangle {
             }
         }
     ]
-
     SubmenuSession{
         id: smSessionX
         x: 119
         y: 117
         opacity: 0        
     }
-
     SubmenuDraw{
         id: smDrawX
         x: 119
@@ -466,8 +444,14 @@ Rectangle {
         y: 117
         visible: false
         opacity: 0
-        onSInsertText: parent.sInsertText()
-        onSInsertPicture: parent.sInsertPicture()
+        onSInsertText: {
+            console.log("text insertion");
+            parent.sInsertText()
+        }
+        onSInsertPicture: {
+            parent.sInsertPicture()
+            console.log("picture");
+        }
     }
     SubmenuAction{
         id: smActionX
