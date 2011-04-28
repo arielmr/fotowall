@@ -38,8 +38,7 @@ TextContent::TextContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem
     , m_textRect(0, 0, 0, 0)
     , m_textMargin(4)
     , m_shakeRadius(0)
-    , m_shapeEditor(0)
-    , m_engine(0)
+    , m_shapeEditor(0)     
     , m_keyboard(0)
     , m_editedText(false)
 {
@@ -345,6 +344,7 @@ void TextContent::setDeclarativeEngine(QDeclarativeEngine *e)
     if (!e)
         return;
     this->m_engine = e;
+
     QDeclarativeComponent component(m_engine, QUrl("qrc:/qml/data/qml/Teclado.qml"));
     if (component.status() != QDeclarativeComponent::Ready)
         qDebug() << component.errorString();
@@ -356,6 +356,7 @@ void TextContent::setDeclarativeEngine(QDeclarativeEngine *e)
     m_keyboard->setPos(-m_keyboard->boundingRect().width()/2.0, this->contentRect().height()/2.0);
     m_keyboard->show();
     connect(m_keyboard, SIGNAL(keyboardLetter(QString)), this, SLOT(slotVirtualKey(QString)));
+    connect(this, SIGNAL(controlVisibilityChanged(bool)), this, SLOT(slotToggleVirtualKeyboard(bool)));
 }
 void TextContent::keyPressEvent(QKeyEvent * event){
     // use F2 to edit the text
@@ -515,7 +516,6 @@ void TextContent::updateCache()
     ...
     */
 }
-
 void TextContent::slotShakeLess()
 {
     if (m_shakeRadius > 0) {
@@ -553,3 +553,11 @@ void TextContent::slotVirtualKey(QString key){
     setHtml(m_text->toHtml());
     m_keyboard->setPos(-m_keyboard->boundingRect().width()/2.0, this->contentRect().height()/2.0);
 }
+void TextContent::slotToggleVirtualKeyboard(bool status){
+    m_keyboard->setEnabled(status);
+    m_keyboard->setVisible(status);
+}
+
+
+
+

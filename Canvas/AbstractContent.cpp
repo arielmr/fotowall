@@ -57,6 +57,7 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     , m_rotationAngle(0)
 #endif
     , m_fxIndex(0)
+    , m_engine(0)
 {
     // the buffered graphics changes timer
     m_gfxChangeTimer = new QTimer(this);
@@ -787,8 +788,6 @@ void AbstractContent::pinchGesture(QGestureEvent* event){
 bool AbstractContent::tapGesture(QTapGesture *gesture){
     qDebug()<< __FILE__<< __LINE__<< "GESTURE: Tap " << gesture->state();
     if (gesture->state() == Qt::GestureFinished){
-//        this->setFocus();
-//        this->setSelected(true);
     }
     return false;
 }
@@ -817,11 +816,15 @@ void AbstractContent::GFX_CHANGED() const
 
 void AbstractContent::setControlsVisible(bool visible)
 {
+    if (m_controlsVisible == visible)
+        return;
+
     m_controlsVisible = visible;
     foreach (CornerItem * corner, m_cornerItems)
         corner->setVisible(visible);
     foreach (ButtonItem * button, m_controlItems)
         button->setVisible(visible);
+    emit controlVisibilityChanged(m_controlsVisible);
 }
 
 QPixmap AbstractContent::ratioScaledPixmap(const QPixmap * source, const QSize & size, Qt::AspectRatioMode ratio) const

@@ -18,7 +18,7 @@
 #include "AbstractContent.h"
 class BezierCubicItem;
 class QTextDocument;
-class QDeclarativeEngine;
+//class QDeclarativeEngine;
 
 /// \brief TODO
 class TextContent : public AbstractContent
@@ -58,7 +58,7 @@ class TextContent : public AbstractContent
         void drawContent(QPainter * painter, const QRect & targetRect, Qt::AspectRatioMode ratio);
         int contentHeightForWidth(int width) const;
         void selectionChanged(bool selected);
-        void setDeclarativeEngine(QDeclarativeEngine* e);
+        virtual void setDeclarativeEngine(QDeclarativeEngine* e);
 
         // ::QGraphicsItem
         void keyPressEvent(QKeyEvent *event);
@@ -82,13 +82,14 @@ class TextContent : public AbstractContent
         BezierCubicItem * m_shapeEditor;
         QPainterPath m_shapePath;
         QRect m_shapeRect;
-        QDeclarativeEngine* m_engine;
+
         bool                m_editedText;
 
     private Q_SLOTS:
         void slotShakeLess();
         void slotShakeMore();
         void slotVirtualKey(QString);
+        void slotToggleVirtualKeyboard(bool);
 };
 
 #endif

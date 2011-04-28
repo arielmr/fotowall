@@ -34,6 +34,8 @@ class QTapGesture;
 class QTapAndHoldGesture;
 class Canvas;
 class CanvasViewContent;
+class QDeclarativeEngine;
+
 /// \brief Base class of Canvas Item (with lots of gadgets!)
 class AbstractContent : public AbstractDisposeable
 {
@@ -45,6 +47,7 @@ class AbstractContent : public AbstractDisposeable
     Q_PROPERTY(bool mirrored READ mirrored WRITE setMirrored NOTIFY mirroredChanged)
     Q_PROPERTY(QPointF perspective READ perspective WRITE setPerspective NOTIFY perspectiveChanged)
     Q_PROPERTY(int fxIndex READ fxIndex WRITE setFxIndex NOTIFY fxIndexChanged)
+    Q_PROPERTY(bool visibleControls READ controlsVisible WRITE setControlsVisible NOTIFY controlVisibilityChanged)
     public:
         AbstractContent(QGraphicsScene * scene, bool fadeIn, bool noRescale, QGraphicsItem * parent);
         virtual ~AbstractContent();
@@ -112,7 +115,8 @@ class AbstractContent : public AbstractDisposeable
 
         // Hyperlink enablers
         CanvasViewContent* childCanvasView(){return m_childCanvasView;}
-        void    setChildCanvasView(CanvasViewContent* canvas){ m_childCanvasView = canvas;}
+        void setChildCanvasView(CanvasViewContent* canvas){ m_childCanvasView = canvas;}
+        virtual void setDeclarativeEngine(QDeclarativeEngine* e){}
 
     Q_SIGNALS:
         // to canvas
@@ -131,6 +135,7 @@ class AbstractContent : public AbstractDisposeable
         void rotationChanged();
 #endif
         void fxIndexChanged();
+        void controlVisibilityChanged(bool);
 
     protected:
         // may be reimplemented by subclasses
@@ -153,6 +158,7 @@ class AbstractContent : public AbstractDisposeable
         virtual void keyPressEvent(QKeyEvent * event);
         QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
+        QDeclarativeEngine* m_engine;
     protected Q_SLOTS:
         void slotConfigure();
         void slotStackFront();
@@ -185,6 +191,7 @@ class AbstractContent : public AbstractDisposeable
 
         Canvas*             m_extCanvas;
         CanvasViewContent*  m_childCanvasView;
+
     private Q_SLOTS:
         void slotSetPerspective(const QPointF & sceneRelPoint, Qt::KeyboardModifiers modifiers);
         void slotClearPerspective();
