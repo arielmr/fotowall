@@ -73,6 +73,9 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     setAcceptHoverEvents(true);
     setAcceptTouchEvents(true);
     grabGesture(Qt::PinchGesture);
+//    grabGesture(Qt::TapAndHoldGesture);
+//    grabGesture(Qt::TapGesture);
+//    grabGesture(Qt::PanGesture);
 
     // create child controls
     createCorner(Qt::TopLeftCorner, noRescale);
@@ -103,8 +106,8 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     addButtonItem(bDelete);
 
     // create default frame
-    Frame * frame = FrameFactory::defaultPictureFrame();
-    setFrame(frame);
+//    Frame * frame = FrameFactory::defaultPictureFrame();
+//    setFrame(frame);
 
     // hide and layoutChildren buttons
     layoutChildren();
@@ -119,6 +122,9 @@ AbstractContent::AbstractContent(QGraphicsScene *scene, bool fadeIn, bool noResc
     setMirrored(false);
 #else
     setMirrored(RenderOpts::LastMirrored);
+#endif
+#ifdef ICT
+    connect(this, SIGNAL(requestEditing()), this, SLOT(slotDiveIntoNested()));
 #endif
 }
 
@@ -658,7 +664,12 @@ QRectF AbstractContent::boundingRect() const
 void AbstractContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
 {
     // emitting the edit request by default. some subclasses request backgrounding
+#ifdef ICT
+    qDebug() << __FILE__<< __LINE__ << "Nested Canvas";
+    slotDiveIntoNested();
+#else
     emit requestEditing();
+#endif
 }
 
 void AbstractContent::paint(QPainter * painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
@@ -679,7 +690,6 @@ void AbstractContent::paint(QPainter * painter, const QStyleOptionGraphicsItem *
         if (m_frame->clipContents())
             painter->setClipPath(m_frame->contentsClipPath(m_contentRect));
     }
-
 #if 0
     if (RenderOpts::OpenGLWindow && drawSelection)
         painter->setCompositionMode(QPainter::CompositionMode_Plus);
@@ -706,66 +716,93 @@ void AbstractContent::paint(QPainter * painter, const QStyleOptionGraphicsItem *
 }
 bool AbstractContent::sceneEvent(QEvent *event)
 {
-    if (event->type() == QEvent::Gesture)
-        return gestureEvent(static_cast<QGestureEvent*>(event));
-    switch (event->type()) {
-         case QEvent::TouchBegin:
-         {
-            setSelected(true);
-            event->accept();
-         }
-         case QEvent::TouchUpdate:
-         case QEvent::TouchEnd:
-         {
-            setSelected(false);
-             QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
-             foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
-                 switch (touchPoint.state()) {
-                 case Qt::TouchPointStationary:
-                     // don't do anything if this touch point hasn't moved
-                     continue;
-                 default:
-                     {
-                     }
-                     break;
-                 }
-             }
-             break;
-         }
-         default:
-            break;
-         }
-         return QGraphicsItem::sceneEvent(event);
+    if (event->type() == QEvent::Gesture){
+        return gestureEvent(static_cast<QGestureEvent*>(event));        
+    }
+
+    else if (event->type() == QEvent::TouchBegin
+            || event->type() == QEvent::TouchUpdate
+            || event->type() == QEvent::TouchEnd){
+        return touchEvent(static_cast<QTouchEvent*> (event));
+    }
+    else
+        return QGraphicsItem::sceneEvent(event);
+}
+bool AbstractContent::touchEvent(QTouchEvent *event){
+//    qDebug()<< "Touch"<< this;
+    if (event->type() == QEvent::TouchBegin)
+        setControlsVisible(!controlsVisible());
+    return true;
 }
 bool AbstractContent::gestureEvent(QGestureEvent* event)
 {
-    if (QGesture *pinch = event->gesture(Qt::PinchGesture)){
-        pinchGesture(static_cast<QPinchGesture *>(pinch));
-        return true;
+    if (QGesture *g = event->gesture(Qt::PinchGesture)){
+        pinchGesture(event);
+        m_dirtyTransforming = true;
     }
-    return false;
+    else if (QGesture *g = event->gesture(Qt::TapGesture)){
+        tapGesture( static_cast<QTapGesture*>(g) );
+    }
+    else if (QGesture *g = event->gesture(Qt::TapAndHoldGesture)){
+        tapHoldGesture( static_cast<QTapAndHoldGesture*>(g) );
+    }
+    return true;
 }
-void AbstractContent::pinchGesture(QPinchGesture* gesture){
+void AbstractContent::pinchGesture(QGestureEvent* event){
+    QPinchGesture* gesture = static_cast<QPinchGesture*> (event->gesture(Qt::PinchGesture));
+    QPointF sceneSpot = event->mapToGraphicsScene(gesture->hotSpot());
+    QPointF itemSpot = this->mapFromScene(sceneSpot);
+
+//    qDebug()<< gesture->state() << this->contains(itemSpot) << gesture->hotSpot() << sceneSpot << itemSpot <<"Pinch"<< this->objectName()<< this->boundingRect();
+
     QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
     if (changeFlags & QPinchGesture::RotationAngleChanged) {
         qreal value = gesture->property("rotationAngle").toReal();
         qreal lastValue = gesture->property("lastRotationAngle").toReal();
-//        rotationAngle += value - lastValue;
-        this->rotate(value-lastValue);
+        this->rotate((value-lastValue)/2.0);
+//        this->rotate(gesture->totalRotationAngle());
     }
     if (changeFlags & QPinchGesture::ScaleFactorChanged) {
         qreal value = gesture->property("scaleFactor").toReal();
         this->scale(value, value);
     }
-    if (gesture->state() == Qt::GestureFinished) {
-//        scaleFactor *= currentStepScaleFactor;
-//        currentStepScaleFactor = 1;
+    if (gesture->state() == Qt::GestureFinished) {        
+        this->delayedDirty(100);
     }
     if (changeFlags & QPinchGesture::CenterPointChanged) {
-        this->setPos(gesture->centerPoint()-
-                     QPointF(boundingRect().width()/2.0, boundingRect().height()/2.0) );
+        float offX = 0.0;//float(contentRect().width())   / 4;
+        float offY = float(contentRect().height())  / 2;
+
+        if (gesture->centerPoint() != gesture->startCenterPoint())
+            this->setPos(this->pos()+ (gesture->centerPoint() - gesture->lastCenterPoint())/2.0);
+//            this->setPos((gesture->centerPoint() - gesture->startCenterPoint()) - QPointF(offX, offY));
     }
+//    qDebug() << "Sc:" << gesture->startCenterPoint()
+//             << "C :"<< gesture->centerPoint()
+//             << "lC"<< gesture->lastCenterPoint()
+//             << "C-Sc" << gesture->startCenterPoint() - gesture->centerPoint()
+//             << "H" << gesture->hotSpot();
     update();
+}
+bool AbstractContent::tapGesture(QTapGesture *gesture){
+    qDebug()<< __FILE__<< __LINE__<< "GESTURE: Tap " << gesture->state();
+    if (gesture->state() == Qt::GestureFinished){
+//        this->setFocus();
+//        this->setSelected(true);
+    }
+    return false;
+}
+bool AbstractContent::tapHoldGesture(QTapAndHoldGesture *gesture){    
+    if (gesture->state() == Qt::GestureFinished){
+        this->setFocus();
+        qDebug()<< __FILE__<< __LINE__<< "GESTURE: Tap&Hold " << gesture->state();
+        setControlsVisible(true);
+    }
+    else{
+        this->clearFocus();
+        setControlsVisible(false);
+    }
+    return false;
 }
 void AbstractContent::selectionChanged(bool /*selected*/)
 {
@@ -999,7 +1036,10 @@ void AbstractContent::slotSaveAs()
         return;
     }
 }
-
+void AbstractContent::slotDiveIntoNested(){
+    qDebug()<< "Diving into: ";
+    emit requestNestedCanvas("_");
+}
 void AbstractContent::createCorner(Qt::Corner corner, bool noRescale)
 {
     CornerItem * c = new CornerItem(corner, noRescale, this);

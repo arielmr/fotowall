@@ -27,8 +27,11 @@ class Frame;
 class MirrorItem;
 class QGraphicsTextItem;
 class QPointF;
+class QTouchEvent;
 class QGestureEvent;
 class QPinchGesture;
+class QTapGesture;
+class QTapAndHoldGesture;
 class Canvas;
 class CanvasViewContent;
 /// \brief Base class of Canvas Item (with lots of gadgets!)
@@ -101,8 +104,11 @@ class AbstractContent : public AbstractDisposeable
 
         // Touch enablers
         virtual bool sceneEvent(QEvent *event);
+        virtual bool touchEvent(QTouchEvent* event);
         virtual bool gestureEvent(QGestureEvent* event);
-        virtual void pinchGesture(QPinchGesture* gesture);
+        virtual void pinchGesture(QGestureEvent* gesture);
+        virtual bool tapGesture(QTapGesture* gesture);
+        virtual bool tapHoldGesture(QTapAndHoldGesture* gesture);
 
         // Hyperlink enablers
         CanvasViewContent* childCanvasView(){return m_childCanvasView;}
@@ -133,6 +139,9 @@ class AbstractContent : public AbstractDisposeable
         // called by subclasses too
         void GFX_CHANGED() const;
         void setControlsVisible(bool visible);
+        bool controlsVisible(){
+            return m_controlsVisible;
+        }
         QPixmap ratioScaledPixmap(const QPixmap * source, const QSize & size, Qt::AspectRatioMode ratio) const;
 
         // ::QGraphicsItem
@@ -140,8 +149,8 @@ class AbstractContent : public AbstractDisposeable
         void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
         void dragMoveEvent(QGraphicsSceneDragDropEvent * event);
         void dropEvent(QGraphicsSceneDragDropEvent * event);
-        void mousePressEvent(QGraphicsSceneMouseEvent * event);
-        void keyPressEvent(QKeyEvent * event);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+        virtual void keyPressEvent(QKeyEvent * event);
         QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
     protected Q_SLOTS:
@@ -151,6 +160,7 @@ class AbstractContent : public AbstractDisposeable
         void slotStackLower();
         void slotStackBack();
         void slotSaveAs();
+        void slotDiveIntoNested();
 
     private:
         void createCorner(Qt::Corner corner, bool noRescale);

@@ -51,6 +51,7 @@ class PictureContent : public AbstractContent
         // ::QGraphicsItem
         void dropEvent(QGraphicsSceneDragDropEvent * event);
         void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
     Q_SIGNALS:
         void flipHorizontally();

@@ -36,7 +36,7 @@
 #include <QProcess>
 #include <QTimer>
 #include <QUrl>
-
+#include <QDebug>
 PictureContent::PictureContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem * parent)
     : AbstractContent(scene, spontaneous, false, parent)
     , m_photo(0)
@@ -49,8 +49,8 @@ PictureContent::PictureContent(bool spontaneous, QGraphicsScene * scene, QGraphi
     , m_watcherTimer(0)
 {
     // enable frame text
-    setFrameTextEnabled(true);
-    setFrameText(tr("..."));
+    setFrameTextEnabled(false);
+//    setFrameText(tr("..."));
 
     // allow dropping
     setAcceptDrops(true);
@@ -75,6 +75,9 @@ PictureContent::PictureContent(bool spontaneous, QGraphicsScene * scene, QGraphi
     bCrop->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
     addButtonItem(bCrop);
     connect(bCrop, SIGNAL(clicked()), this, SIGNAL(requestCrop()));
+#endif
+#ifdef ICT
+    connect(this, SIGNAL(requestEditing()), this, SLOT(slotDiveIntoNested()));
 #endif
 }
 
@@ -470,14 +473,19 @@ void PictureContent::dropEvent(QGraphicsSceneDragDropEvent * event)
 
 void PictureContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
 {
+#ifdef ICT
+    emit requestEditing();
+#else
     emit requestBackgrounding();
+#endif
 }
-
+void PictureContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
+    AbstractContent::mouseMoveEvent(event);
+}
 void PictureContent::setExternalEdit(bool enabled)
 {
     if (!m_photo)
         return;
-
     // start gimp if requested
     if (enabled && !m_watcher) {
         // save the pic to a file
