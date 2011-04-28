@@ -51,8 +51,6 @@ Rectangle {
                 circleContainer.triggered()
             }
         }
-
-
     }
         Image {
             id: image1

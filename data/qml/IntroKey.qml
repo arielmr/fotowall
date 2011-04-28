@@ -1,5 +1,5 @@
 import QtQuick 1.0
-
+import Qt.labs.gestures 2.0
 Item {
     id: keyboardKey
     width: 100
@@ -21,6 +21,14 @@ Item {
         onReleased: parent.state = ""
         onClicked: {
             keyboardKey.shiftSpecial()
+        }
+    }
+    GestureArea {
+        anchors.fill: parent
+        Tap{
+            onFinished: {
+                keyboardKey.shiftSpecial()
+            }
         }
     }
     Rectangle {

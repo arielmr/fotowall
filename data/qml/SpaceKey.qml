@@ -1,4 +1,5 @@
 import QtQuick 1.0
+import Qt.labs.gestures 2.0
 
 Item {
     id: keyboardKey
@@ -13,6 +14,18 @@ Item {
             parent.click()
         }
         onReleased: parent.state = ""
+    }
+    GestureArea {
+        anchors.fill: parent
+        Tap{
+            onStarted: {
+                parent.state = "stateHit"
+            }
+            onFinished: {
+                parent.state = ""
+                keyboardKey.click()
+            }
+        }
     }
     Rectangle {
         id: rectangle1
@@ -56,7 +69,7 @@ Item {
 
             PropertyChanges {
                 target: rectangle1
-                //color: "#01beaf"
+                color: "#01beaf"
             }
         }
     ]
