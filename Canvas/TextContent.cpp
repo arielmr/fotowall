@@ -31,6 +31,7 @@
 #include <QTextFrame>
 #include <QUrl>
 
+#include <QDeclarativeComponent>
 TextContent::TextContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem * parent)
     : AbstractContent(scene, spontaneous, false, parent)
     , m_text(0)
@@ -38,10 +39,14 @@ TextContent::TextContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem
     , m_textMargin(4)
     , m_shakeRadius(0)
     , m_shapeEditor(0)
+    , m_engine(0)
+    , m_keyboard(0)
+    , m_editedText(false)
 {
     setFrame(0);
     setFrameTextEnabled(false);
-    setToolTip(tr("Right click to Edit the text"));
+    setToolTip(tr("Edit the text"));
+//    grabGesture(Qt::PinchGesture);
 
     // create a text document
     m_text = new QTextDocument(this);
@@ -52,16 +57,16 @@ TextContent::TextContent(bool spontaneous, QGraphicsScene * scene, QGraphicsItem
 #if defined(Q_OS_WIN) || defined(Q_OS_OS2)
     font.setFamily("Arial");
 #endif
-    font.setPointSize(16);
+    font.setPointSize(24);
     m_text->setDefaultFont(font);
-    m_text->setPlainText(tr("right click to edit..."));
+    m_text->setPlainText(tr("Write here, this is text"));
     setHtml(m_text->toHtml());
 
     // shape editor
     m_shapeEditor = new BezierCubicItem(this);
     m_shapeEditor->setVisible(false);
     m_shapeEditor->setControlPoints(QList<QPointF>() << QPointF(-100, -50) << QPointF(-10, 40) << QPointF(100, -50) << QPointF(100, 50));
-    connect(m_shapeEditor, SIGNAL(shapeChanged(const QPainterPath &)), this, SLOT(setShapePath(const QPainterPath &)));
+    connect(m_shapeEditor, SIGNAL(shapeChanged(const QPainterPath &)), this, SLOT(setShapePath(const QPainterPath &)));        
 }
 
 TextContent::~TextContent()
@@ -106,7 +111,6 @@ void TextContent::setShapeEditing(bool enabled)
             m_shapeEditor->show();
             emit notifyShapeEditing(true);
         }
-
         // begin new shape
         if (!hasShape()) {
             // use caching only when drawing shaped [disabled because updates are wrong when cached!]
@@ -336,9 +340,24 @@ void TextContent::selectionChanged(bool selected)
     if (!selected && isShapeEditing())
         setShapeEditing(false);
 }
-
-void TextContent::keyPressEvent(QKeyEvent * event)
+void TextContent::setDeclarativeEngine(QDeclarativeEngine *e)
 {
+    if (!e)
+        return;
+    this->m_engine = e;
+    QDeclarativeComponent component(m_engine, QUrl("qrc:/qml/data/qml/Teclado.qml"));
+    if (component.status() != QDeclarativeComponent::Ready)
+        qDebug() << component.errorString();
+
+    m_keyboard = qobject_cast<QGraphicsObject *>(component.create());
+    qDebug()<< m_keyboard;
+    m_keyboard->setAcceptTouchEvents(true);
+    m_keyboard->setParentItem(this);
+    m_keyboard->setPos(-m_keyboard->boundingRect().width()/2.0, this->contentRect().height()/2.0);
+    m_keyboard->show();
+    connect(m_keyboard, SIGNAL(keyboardLetter(QString)), this, SLOT(slotVirtualKey(QString)));
+}
+void TextContent::keyPressEvent(QKeyEvent * event){
     // use F2 to edit the text
     if (event->key() == Qt::Key_F2) {
         event->accept();
@@ -350,7 +369,11 @@ void TextContent::keyPressEvent(QKeyEvent * event)
 
 void TextContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
 {
+#ifdef ICT
+    emit requestEditing();
+#else
     emit requestBackgrounding();
+#endif
 }
 
 QPainterPath TextContent::shapePath() const
@@ -505,4 +528,28 @@ void TextContent::slotShakeMore()
 {
     m_shakeRadius++;
     updateTextConstraints();
+}
+void TextContent::slotVirtualKey(QString key){
+    if(!m_editedText){
+        m_text->setPlainText("");
+        setHtml(m_text->toHtml());
+        m_editedText = true;
+    }
+    if (key =="INTRO"){
+        key = "\n";
+    }
+    else if (key =="BACKSPACE"){
+        QString tmp = m_text->toPlainText();
+        tmp.chop(1);
+        m_text->setPlainText(tmp);
+        key="";
+    }
+    else if (key == " "){
+
+    }
+    else
+        key = key.trimmed();
+    m_text->setPlainText(m_text->toPlainText() + key);
+    setHtml(m_text->toHtml());
+    m_keyboard->setPos(-m_keyboard->boundingRect().width()/2.0, this->contentRect().height()/2.0);
 }

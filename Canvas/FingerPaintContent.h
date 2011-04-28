@@ -50,6 +50,10 @@ class FingerPaintContent : public AbstractContent
 
         // ::QGraphicsItem
         void dropEvent(QGraphicsSceneDragDropEvent * event);
+        void mousePressEvent(QGraphicsSceneMouseEvent *event);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+        bool touchEvent(QTouchEvent *event);
 //        void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
     Q_SIGNALS:
@@ -62,8 +66,6 @@ class FingerPaintContent : public AbstractContent
         void setExternalEdit(bool);
         bool externalEdit() const;
         bool sceneEvent(QEvent *event);
-        void mousePressEvent(QGraphicsSceneMouseEvent *event);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
     private:
         void dropNetworkConnection();
@@ -80,6 +82,9 @@ class FingerPaintContent : public AbstractContent
         QFileSystemWatcher * m_watcher;
         QTimer *    m_watcherTimer;
         QList<QColor> myPenColors;
+        bool            m_painting;
+        QGraphicsItem*  m_brushItem;
+        QPen*           m_pen;
 
     private Q_SLOTS:
         void slotGimpCompressNotifies();
@@ -87,7 +92,7 @@ class FingerPaintContent : public AbstractContent
         bool slotLoadNetworkData();
         void slotNetworkError();
         void slotNetworkProgress(qint64, qint64);        
-        void slotDiveIntoNested();
+
 };
 
 #endif //FingerPaintContent

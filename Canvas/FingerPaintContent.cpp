@@ -49,6 +49,8 @@ FingerPaintContent::FingerPaintContent(bool spontaneous, QGraphicsScene * scene,
     , m_netReply(0)
     , m_watcher(0)
     , m_watcherTimer(0)
+    , m_painting(0)
+    , m_pen(0)
 //    , m_nestedCanvasFile("")
 {
 
@@ -80,7 +82,10 @@ FingerPaintContent::FingerPaintContent(bool spontaneous, QGraphicsScene * scene,
     setAcceptHoverEvents(true);
     setControlsVisible(true);
     m_photo = new CPixmap(500,500);
-    resizeContents(m_photo->rect(), true);
+    resizeContents(QRect(-m_photo->width()/2.0, -m_photo->height()/2.0, m_photo->width(), m_photo->height()), true);
+
+    m_pen = new QPen();
+    m_pen->setWidth(20);
 
     myPenColors
                  << QColor("green")
@@ -94,7 +99,6 @@ FingerPaintContent::FingerPaintContent(bool spontaneous, QGraphicsScene * scene,
                  << QColor("brown")
                  << QColor("grey")
                  << QColor("black");
-    connect(this, SIGNAL(requestEditing()), this, SLOT(slotDiveIntoNested()));
 //    slotDiveIntoNested();
 
     // customize item's behavior
@@ -102,6 +106,9 @@ FingerPaintContent::FingerPaintContent(bool spontaneous, QGraphicsScene * scene,
 #if QT_VERSION >= 0x040600
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 #endif
+
+//    m_brushItem = new QGraphicsEllipseItem(this, this->scene());
+//    m_brushItem->show();
 }
 
 FingerPaintContent::~FingerPaintContent()
@@ -403,14 +410,9 @@ void FingerPaintContent::toXml(QDomElement & contentElement, const QDir & baseDi
 }
 void FingerPaintContent::drawContent(QPainter * painter, const QRect & targetRect, Qt::AspectRatioMode ratio)
 {
-//    qDebug()<< contentRect();
     painter->setOpacity(0.2);
     painter->drawRect(0,0,contentRect().width(), contentRect().height());
-    painter->setOpacity(1.0);
-    painter->drawPixmap(0,0,contentRect().width(), contentRect().height(), *m_photo);
-    return;
-
-
+    painter->setOpacity(.8);
 
     // draw progress
     if (m_progress > 0.0 && m_progress < 1.0 && !RenderOpts::HQRendering) {
@@ -431,7 +433,7 @@ void FingerPaintContent::drawContent(QPainter * painter, const QRect & targetRec
 #endif
 
     // draw high-resolution photo when exporting png
-    if (RenderOpts::HQRendering || ratio != Qt::IgnoreAspectRatio) {
+//    if (true || RenderOpts::HQRendering || ratio != Qt::IgnoreAspectRatio) {
         QSize scaledSize = m_photo->size();
         scaledSize.scale(targetRect.size(), ratio);
         int offX = targetRect.left() + (targetRect.width() - scaledSize.width()) / 2;
@@ -439,18 +441,18 @@ void FingerPaintContent::drawContent(QPainter * painter, const QRect & targetRec
         painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform, true);
         painter->drawPixmap(offX, offY, scaledSize.width(), scaledSize.height(), *m_photo);
         return;
-    }
+//    }
 
     // draw photo using caching and deferred rescales
-    if (beingTransformed()) {
-        if (!m_cachedPhoto.isNull())
-            painter->drawPixmap(targetRect, m_cachedPhoto);
-    } else {
-        if (m_cachedPhoto.isNull() || m_cachedPhoto.size() != targetRect.size())
-            m_cachedPhoto = m_photo->scaled(targetRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-        painter->drawPixmap(targetRect.topLeft(), m_cachedPhoto);
-    }
+//    if (beingTransformed()) {
+//        if (!m_cachedPhoto.isNull())
+//            painter->drawPixmap(targetRect, m_cachedPhoto);
+//    } else {
+//        if (m_cachedPhoto.isNull() || m_cachedPhoto.size() != targetRect.size())
+//            m_cachedPhoto = m_photo->scaled(targetRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+//        painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+//        painter->drawPixmap(targetRect.topLeft(), m_cachedPhoto);
+//    }
 
 #if QT_VERSION >= 0x040600
 //    if (m_opaquePhoto)
@@ -500,16 +502,6 @@ void FingerPaintContent::dropEvent(QGraphicsSceneDragDropEvent * event)
         }
     }
 }
-
-//void FingerPaintContent::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
-//{
-//#ifdef ICT
-//    emit requestNestedCanvas();
-//#else
-//    emit requestBackgrounding();
-//#endif
-//}
-
 void FingerPaintContent::setExternalEdit(bool enabled)
 {
     if (!m_photo)
@@ -558,53 +550,62 @@ bool FingerPaintContent::externalEdit() const
     return m_watcher;
 }
 bool FingerPaintContent::sceneEvent(QEvent *event){
-    QPen pen;
-    pen.setWidth(20);
-
-    bool ret = false;
-
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-        ret=true; //MUST receive the first one to receive further events
-    case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:{
-//        qDebug()<< "Fingerpaint sceneEvent touches";
-        QTouchEvent *e = static_cast<QTouchEvent*>(event);
-        QList<QTouchEvent::TouchPoint> touchPoints = e->touchPoints();
-        QPointF remapFactor (qreal(m_photo->width())  / qreal(contentRect().width()),
-                             qreal(m_photo->height()) / qreal(contentRect().height()));
-//        qDebug()<< remapFactor;
-        foreach (QTouchEvent::TouchPoint tp, touchPoints){
-            QRectF rect = tp.rect();
-            if (rect.isEmpty()) {
-                qreal diameter = qreal(10);// * tp.pressure();
-                rect.setSize(QSizeF(diameter, diameter));
-            }
-            QPainter painter(m_photo);
-            painter.setPen(Qt::NoPen);
-            painter.setBrush(Qt::yellow);
-            QPointF X = (tp.pos() + QPointF(0,250));
-//            painter.drawLine(X, X);
-            painter.drawEllipse(rect);
-            painter.end();
-
-            int rad = 2;
-            ret=true;
-            update();
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    return (AbstractContent::sceneEvent(event) || ret); // ret=true to accept TouchBegin
+    return (AbstractContent::sceneEvent(event));
 }
 void FingerPaintContent::mousePressEvent(QGraphicsSceneMouseEvent *event){
     AbstractContent::mousePressEvent(event);
 }
 void FingerPaintContent::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
-    AbstractContent::mouseMoveEvent(event);
+    return AbstractContent::mouseMoveEvent(event);
+}
+void FingerPaintContent::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
+    AbstractContent::mousePressEvent(event);
+}
+bool FingerPaintContent::touchEvent(QTouchEvent *event){
+    //        qDebug()<< "Fingerpaint sceneEvent touches";
+    bool ret = false;
+    switch (event->type()) {
+         case QEvent::TouchBegin:{
+            setSelected(true);
+            event->accept();
+            ret=true; //MUST receive the first one to receive further events
+         }
+         case QEvent::TouchUpdate:
+         case QEvent::TouchEnd:
+         {
+            setSelected(false);
+             QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
+             foreach (const QTouchEvent::TouchPoint &tp, touchPoints) {
+                 if ((tp.state() == Qt::TouchPointPressed || tp.state() == Qt::TouchPointMoved)
+                         && !beingTransformed() ){
+                     QRectF rect = tp.rect();
+                     if (rect.isEmpty()) {
+                         qreal diameter = qreal(10) * tp.pressure();
+                         rect.setSize(QSizeF(diameter, diameter));
+                     }
+                     QPainter painter(m_photo);
+                     painter.setPen(Qt::NoPen);
 
+                     float ratioX = float(m_photo->size().width()) / contentRect().width();
+                     float ratioY = float(m_photo->size().height())/ contentRect().height();
+
+                     float mapX = (float(tp.pos().x()) + float(contentRect().size().width())  / 2.0) * ratioX;
+                     float mapY = (float(tp.pos().y()) + float(contentRect().size().height()) / 2.0) * ratioY;
+
+                     QPointF X = QPointF(mapX, mapY);
+                     painter.setBrush(Qt::red);
+                     painter.drawEllipse(X, 12, 12);
+                     painter.end();
+                     ret=true;
+                     update();
+                 }
+             }
+             break;
+         }
+         default:
+            break;
+         }
+    return ret;
 }
 void FingerPaintContent::dropNetworkConnection()
 {
@@ -706,8 +707,4 @@ void FingerPaintContent::slotNetworkProgress(qint64 a, qint64 b)
 {
     m_progress = b > 0 ? (double)a / (double)b : 0.0;
     update();
-}
-void FingerPaintContent::slotDiveIntoNested(){
-//    qDebug()<< "Diving into: ["<< m_nestedCanvasFile << "]";
-    emit requestNestedCanvas("_");
 }

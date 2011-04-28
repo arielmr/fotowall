@@ -23,7 +23,7 @@ class Canvas;
 class PixmapButton;
 class QGraphicsObject;
 class CanvasViewContent;
-
+class QDeclarativeEngine;
 class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
 {
     Q_OBJECT
@@ -63,16 +63,19 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         QAction *                   m_gBackContentAction;
         QList<PixmapButton *>       m_webcamButtons;
         QGraphicsObject*            m_menu;
+        QGraphicsObject*            m_photoLoader;
         QGraphicsItem*              m_finger;
+        QDeclarativeEngine*         m_engine;
 
     private Q_SLOTS:
         // actions in the Add contents box
         void slotAddCanvas();
         void slotAddPicture();
+        void slotAddSinglePicture(QString filename);
         void slotAddText();
         void slotAddWebcam();
         void slotAddWordcloud();
-        void slotAddFingerPaint();
+        void slotAddFingerPaint();        
         void slotSearchPicturesToggled(bool on);
 
         // actions in the Canvas box
@@ -100,11 +103,16 @@ class CanvasAppliance : public QObject, public PlugGui::AbstractAppliance
         void slotShowPropertiesWidget(QWidget *);
         void slotFilePathChanged();
         void slotPushChildCanvasView(CanvasViewContent* canvas);
+//        void slotPopMe();
 
         // other actions
         void slotVerifyVideoInputs(int count);
 
         void slotShowMenu(QPointF);
+        void slotCloseMenu();        
+        void slotDelayCloseMenu();
+        void slotShowPictureBrowse();
+        void slotClosePictureBrowse();
 };
 
 #endif

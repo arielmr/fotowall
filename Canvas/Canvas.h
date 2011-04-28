@@ -49,11 +49,11 @@ class Canvas : public AbstractScene
         // add/remove content
         void addAutoContent(const QStringList & filePaths);
         CanvasViewContent* addCanvasViewContent(const QStringList & fwFilePaths);
-        void addPictureContent(const QStringList & picFilePaths);
-        void addTextContent();
-        void addWebcamContent(int webcamIndex);
-        void addWordcloudContent();
-        void addManualContent(AbstractContent * content, const QPoint & pos);
+        AbstractContent* addPictureContent(const QStringList & picFilePaths);
+        AbstractContent* addTextContent();
+        AbstractContent* addWebcamContent(int webcamIndex);
+        AbstractContent* addWordcloudContent();
+        AbstractContent* addManualContent(AbstractContent * content, const QPoint & pos);
         void clearContent();
         QPoint visibleCenter() const;
 

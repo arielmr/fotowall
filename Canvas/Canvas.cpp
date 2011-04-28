@@ -186,20 +186,23 @@ CanvasViewContent* Canvas::addCanvasViewContent(const QStringList & fwFilePaths)
                 pos += QPoint(30, 30);
             }
         }
+        return 0;
     }
 }
 
-void Canvas::addPictureContent(const QStringList & picFilePaths)
+AbstractContent* Canvas::addPictureContent(const QStringList & picFilePaths)
 {
+    qDebug()<< "add pix" << picFilePaths;
     clearSelection();
     int offset = -30 * (picFilePaths.size() - 1) / 2;
+    PictureContent * p=0;
     QPoint pos = visibleCenter() + QPoint(offset, offset);
     foreach (const QString & localFile, picFilePaths) {
         if (!QFile::exists(localFile))
             continue;
 
         // create picture and load the file
-        PictureContent * p = createPicture(pos, true);
+        p = createPicture(pos, true);
         if (!p->loadPhoto(localFile, true, true)) {
             m_content.removeAll(p);
             delete p;
@@ -208,31 +211,35 @@ void Canvas::addPictureContent(const QStringList & picFilePaths)
             pos += QPoint(30, 30);
         }
     }
+    return p;
 }
 
-void Canvas::addTextContent()
+AbstractContent* Canvas::addTextContent()
 {
     clearSelection();
     TextContent * t = createText(visibleCenter(), true);
     t->setSelected(true);
+    return t;
 }
 
-void Canvas::addWebcamContent(int webcamIndex)
+AbstractContent* Canvas::addWebcamContent(int webcamIndex)
 {
     clearSelection();
     WebcamContent * w = createWebcam(webcamIndex, visibleCenter(), true);
     w->setSelected(true);
+    return w;
 }
 
-void Canvas::addWordcloudContent()
+AbstractContent* Canvas::addWordcloudContent()
 {
     clearSelection();
     WordcloudContent * w = createWordcloud(visibleCenter(), true);
     w->manualInitialization();
     w->setSelected(true);
+    return w;
 }
 
-void Canvas::addManualContent(AbstractContent * content, const QPoint & pos)
+AbstractContent* Canvas::addManualContent(AbstractContent * content, const QPoint & pos)
 {
     initContent(content, pos);
 }
@@ -1143,6 +1150,7 @@ void Canvas::initContent(AbstractContent * content, const QPoint & pos)
     connect(content, SIGNAL(requestEditing()), this, SLOT(slotEditContent()), Qt::QueuedConnection);
     connect(content, SIGNAL(requestRemoval()), this, SLOT(slotDeleteContent()), Qt::QueuedConnection);
 
+
     if (!pos.isNull())
         content->setPos(pos);
     content->setZValue(m_content.isEmpty() ? 1 : (m_content.last()->zValue() + 1));
@@ -1572,14 +1580,14 @@ void Canvas::slotApplyForce()
     }
 }
 void Canvas::slotNestedCanvas(QString name){
-//    qDebug()<< __FILE__ <<  __LINE__<< "GO TO nested canvas "<< name<< sender();
+    qDebug()<< __FILE__ <<  __LINE__<< "GO TO nested canvas "<< name<< sender();
     AbstractContent* p = qobject_cast<AbstractContent*> (sender());
 
     if (!p)
         return;
 
     if (!p->childCanvasView()){
-//        qDebug()<< "    CREATING NEW nested canvas "<< name << sender();
+        qDebug()<< "    CREATING NEW nested canvas "<< name << sender();
         CanvasViewContent* c = addCanvasViewContent(QStringList::QStringList());
         c->hide();
         p->setChildCanvasView(c);
@@ -1587,7 +1595,6 @@ void Canvas::slotNestedCanvas(QString name){
     if (!p->childCanvasView())
         return;
 
-//    qDebug()<< "    EDITING nested canvas "<< name;
+    qDebug()<< "    EDITING nested canvas "<< name;
     emit requestPushChildCanvasView(p->childCanvasView());
-//    emit requestContentEditing(p->childCanvasView());
 }

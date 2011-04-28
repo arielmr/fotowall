@@ -37,10 +37,11 @@
 #include <QMenu>
 #include <QSlider>
 #include <QWidgetAction>
-
+#include <QTimer>
 #include <QDeclarativeItem>
 #include <QDeclarativeEngine>
-
+#include <QDeclarativeProperty>
+#include "Canvas/TextContent.h"
 CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
   : QObject(parent)
   , m_extCanvas(extCanvas)
@@ -48,6 +49,9 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
   , m_gBackModeGroup(0)
   , m_gBackRatioGroup(0)
   , m_gBackContentAction(0)
+  , m_menu (0)
+  , m_photoLoader(0)
+
 {
     // init UI
     ui.setupUi(m_dummyWidget);
@@ -87,7 +91,6 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
     connect(m_extCanvas, SIGNAL(requestContentEditing(AbstractContent*)), this, SLOT(slotEditContent(AbstractContent*)));
     connect(m_extCanvas, SIGNAL(showPropertiesWidget(QWidget*)), this, SLOT(slotShowPropertiesWidget(QWidget*)));
     connect(m_extCanvas, SIGNAL(filePathChanged()), this, SLOT(slotFilePathChanged()));
-
     connect(m_extCanvas, SIGNAL(requestPushChildCanvasView(CanvasViewContent*)), this, SLOT(slotPushChildCanvasView(CanvasViewContent*)) );
 
     // react to VideoProvider
@@ -105,26 +108,42 @@ CanvasAppliance::CanvasAppliance(Canvas * extCanvas, QObject * parent)
     }
     slotProjectComboActivated(pComboIndex);
 
-    QDeclarativeEngine *engine = new QDeclarativeEngine;
+    m_engine = new QDeclarativeEngine;
+    m_engine->setBaseUrl(QUrl("qrc:/qml/data/qml/"));
+    m_engine->addImportPath("/home/itai/git/qml-toucharea/TouchArea-build-desktop/imports/");
+    m_engine->addImportPath("/home/itai/git/gestures-build-desktop/imports/");
 
-    engine->setBaseUrl(QUrl("qrc:/qml/data/qml/"));
-    engine->addImportPath("/home/itai/git/qml-toucharea/TouchArea-build-desktop/imports/");
-
-    QDeclarativeComponent component(engine, QUrl("qrc:/qml/data/qml/menu.qml"));
+    QDeclarativeComponent component(m_engine, QUrl("qrc:/qml/data/qml/menu.qml"));
 
     if (component.status() != QDeclarativeComponent::Ready)
         qDebug() << component.errorString();
 
     m_menu = qobject_cast<QGraphicsObject *>(component.create());
     m_menu->setAcceptTouchEvents(true);
-    m_extCanvas->addItem(m_menu);
+    m_extCanvas->addItem(m_menu);    
+    m_menu->setPos(-120,-120);
+    m_menu->setZValue(100);
     m_menu->hide();
+    m_menu->setEnabled(false);
 
-    connect(m_menu, SIGNAL(sToolsText()), this, SLOT(slotAddText()));
-    connect(m_menu, SIGNAL(sInsertPicture()), this, SLOT(slotAddPicture()));
-    connect(m_menu, SIGNAL(sFreehand()), this, SLOT(slotAddFingerPaint()));
+    QDeclarativeComponent component2(m_engine, QUrl("qrc:/qml/data/qml/photoLoad/flickr.qml"));
+    if (component2.status() != QDeclarativeComponent::Ready)
+        qDebug() << component2.errorString();
+    m_photoLoader = qobject_cast<QGraphicsObject *>(component2.create());
+    QDeclarativeProperty::write(m_photoLoader, "folder", "file:///home/itai/Documentos/fotos/");
+
+    m_photoLoader->setAcceptTouchEvents(true);
+    m_photoLoader->show();
+    m_extCanvas->addItem(m_photoLoader);
+    m_photoLoader->setZValue(100);
+    m_photoLoader->hide();
+    m_photoLoader->setEnabled(false);
+
+    connect(m_photoLoader, SIGNAL(insertPhoto(QString)), this, SLOT(slotAddSinglePicture(QString)));
+//    connect(m_photoLoader, SIGNAL(requestClose()), this, SLOT(slotClosePictureBrowse()));
 
     m_finger = new QGraphicsEllipseItem(-10,-10,20,20, 0, 0);
+    m_finger->setEnabled(false);
     m_extCanvas->addItem(m_finger);
 }
 
@@ -428,47 +447,71 @@ void CanvasAppliance::slotAddCanvas()
 
 void CanvasAppliance::slotAddPicture()
 {
-    // make up the default load path (stored as 'Fotowall/LoadImagesDir')
-    QString defaultLoadPath = App::settings->value("Fotowall/LoadImagesDir").toString();
 
+//    slotShowPictureBrowse();
+
+
+
+
+    return;
+    // make up the default load path (stored as 'Fotowall/LoadImagesDir')
+//    QString defaultLoadPath = App::settings->value("Fotowall/LoadImagesDir").toString();
+    QString defaultLoadPath = "/home/itai/git/inofotos/";
+    qDebug()<< defaultLoadPath;
     // ask the file name, validate it, store back to settings and load the file
-    QStringList picFilePaths = QFileDialog::getOpenFileNames(0, tr("Add Pictures to the Canvas"), defaultLoadPath, tr("Images (%1)").arg(App::supportedImageFormats()) /*, 0, QFileDialog::DontResolveSymlinks*/);
-    if (picFilePaths.isEmpty())
-        return;
-    App::settings->setValue("Fotowall/LoadImagesDir", QFileInfo(picFilePaths[0]).absolutePath());
-    m_extCanvas->addPictureContent(picFilePaths);
-    m_menu->hide();
+//    QStringList picFilePaths = QFileDialog::getOpenFileNames(0, tr("Add Pictures to the Canvas"), defaultLoadPath, tr("Images (%1)").arg(App::supportedImageFormats()) /*, 0, QFileDialog::DontResolveSymlinks*/);
+//    qDebug()<< picFilePaths;
+//    if (picFilePaths.isEmpty())
+//        return;
+//    App::settings->setValue("Fotowall/LoadImagesDir", QFileInfo(picFilePaths[0]).absolutePath());
+    QStringList f;
+    f << "file:///home/itai/Descargas/lycra/images//23.png";
+//    m_extCanvas->addPictureContent(picFilePaths);
+    m_extCanvas->addPictureContent(f);
     setFocusToScene();
 }
+void CanvasAppliance::slotAddSinglePicture(QString filename)
+{
+    if (filename.startsWith("file://"))
+        filename=filename.remove(0,7);
+    QStringList f;
+    f << filename;
+    m_extCanvas->addPictureContent(f);
+    slotClosePictureBrowse();
+    setFocusToScene();
 
+}
 void CanvasAppliance::slotAddText()
 {
-    m_extCanvas->addTextContent();
-    m_menu->hide();
+    AbstractContent* content = m_extCanvas->addTextContent();
+#ifdef ICT
+    connect(content, SIGNAL(requestNestedCanvas(QString)), m_extCanvas, SLOT(slotNestedCanvas(QString)));    
+    TextContent * t = static_cast<TextContent*> (content);
+    t->setDeclarativeEngine(m_engine);
+#endif
     setFocusToScene();
 }
 
 void CanvasAppliance::slotAddWebcam()
 {
     int webcamIndex = sender()->property("index").toInt();
-    m_extCanvas->addWebcamContent(webcamIndex);
-    m_menu->hide();
+    AbstractContent* content = m_extCanvas->addWebcamContent(webcamIndex);
     setFocusToScene();
 }
 
 void CanvasAppliance::slotAddWordcloud()
 {
     m_extCanvas->addWordcloudContent();
-    m_menu->hide();
     setFocusToScene();
 }
 void CanvasAppliance::slotAddFingerPaint()
 {
     AbstractContent* content = new FingerPaintContent(true, m_extCanvas);
     content->rotate(5);
-    m_extCanvas->addManualContent(content, QPoint(113,279));
+    m_extCanvas->addManualContent(content, QPoint(613,279));
+#ifdef ICT
     connect(content, SIGNAL(requestNestedCanvas(QString)), m_extCanvas, SLOT(slotNestedCanvas(QString)));
-    m_menu->hide();
+#endif
     setFocusToScene();
 }
 void CanvasAppliance::slotSearchPicturesToggled(bool visible)
@@ -581,7 +624,7 @@ void CanvasAppliance::slotEditContent(AbstractContent *content)
     // handle Canvas
     if (CanvasViewContent * cvc = dynamic_cast<CanvasViewContent *>(content)) {
 //        qDebug()<< "    CanvasAppliance handling a Canvas";
-        App::workflow->stackSlaveCanvas_A(cvc);
+        App::workflow->stackSlaveCanvas_A(cvc);        
         return;
     }
 
@@ -692,10 +735,42 @@ void CanvasAppliance::slotVerifyVideoInputs(int count)
     }
 }
 void CanvasAppliance::slotShowMenu(QPointF position){
+    if (m_extCanvas->itemAt(position)){
+        m_finger->setPos(position);
+        return;
+    }
+
     m_finger->setPos(position);
-    if (m_extCanvas){        
+
+    if (m_extCanvas && !m_menu->isEnabled()){
         m_menu->show();
-//        m_menu->setPos(position - QPointF(m_menu->boundingRect().width()/2.0, m_menu->boundingRect().height()/2.0));
+        m_menu->setEnabled(true);
+        m_menu->setPos(position - QPointF(600, 350));
+        connect(m_menu, SIGNAL(sInsertText()), this, SLOT(slotAddText()));
+        connect(m_menu, SIGNAL(sInsertPicture()), this, SLOT(slotShowPictureBrowse()));
+        connect(m_menu, SIGNAL(sFreehand()), this, SLOT(slotAddFingerPaint()));
+        connect(m_menu, SIGNAL(requestCloseMenu()), this, SLOT(slotCloseMenu()));
     }
     m_extCanvas->update();
+}
+void CanvasAppliance::slotCloseMenu(){
+    if (m_extCanvas){
+        m_menu->disconnect();
+        m_menu->hide();
+        m_menu->setEnabled(false);
+    }
+    m_extCanvas->update();
+}
+void CanvasAppliance::slotDelayCloseMenu(){
+    connect(m_menu, SIGNAL(requestCloseMenu()), this, SLOT(slotCloseMenu()));
+}
+void CanvasAppliance::slotShowPictureBrowse(){
+    m_photoLoader->show();
+    m_photoLoader->setEnabled(true);
+    slotCloseMenu();
+    m_extCanvas->update();
+}
+void CanvasAppliance::slotClosePictureBrowse(){
+    m_photoLoader->setEnabled(false);
+    m_photoLoader->hide();
 }
