@@ -35,7 +35,9 @@ Item {
         color: "#00000000"
         radius: 12
         border.color: "#01beaf"
+        border.width: 2
         z: -1
+        smooth: true
 
 
         Image {

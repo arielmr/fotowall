@@ -9,20 +9,37 @@ Rectangle {
 
     signal clicked()
     MouseArea{
-        anchors.fill: parent
+        anchors.fill: keyboardKey
         onPressed: {
             parent.state = "stateHit"
         }
-//        onReleased:{
-//            parent.state = ""
-//        }
+        onReleased:{
+            parent.state = ""
+        }
         onClicked: {
             parent.clicked()
         }
     }
+    Rectangle {
+        id: backbut
+        x: 9
+        y: 27
+        width: 200
+        height: 200
+        color: "#01beaf"
+        radius: 18
+        opacity: 0.0
+        anchors.fill: parent
+        Behavior on opacity {
+            NumberAnimation{
+                duration: 800
+                easing.type: Easing.OutElastic
+            }
+        }
+    }
     GestureArea {
         id: gestureArea
-        anchors.fill: parent
+        anchors.fill: keyboardKey
         property bool tap: false
         Tap{
             onFinished: {
@@ -43,10 +60,10 @@ Rectangle {
         source: "images/digital-fingerprintgreen.png"
         Behavior on opacity{
             NumberAnimation{
-                duration: 800
-                easing.type: Easing.OutExpo
+                duration: 1200
+                easing.type: Easing.OutElastic
             }
-        }
+        }        
     }
     Text {
         id: key
@@ -55,6 +72,12 @@ Rectangle {
         width: 80
         height: 20
         text: "X"
+        style: Text.Raised
+        font.underline: false
+        font.strikeout: false
+        font.italic: false
+        font.bold: true
+        font.family: "Sans Serif"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 60
@@ -68,7 +91,15 @@ Rectangle {
                 target: hit
                 opacity: 1
             }
-            onCompleted: keyboardKey.state= ""
+            PropertyChanges {
+                target: key
+                color: "#ffffff"
+            }
+            PropertyChanges {
+                target: backbut
+                opacity: 1
+            }
+//            onCompleted: keyboardKey.state= ""
         }
     ]
 

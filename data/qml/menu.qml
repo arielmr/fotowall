@@ -4,11 +4,13 @@ Rectangle {
     id:pieMenu
     width: 550
     height: 600
-    color: "#00000000"
+    color: "transparent"
     signal sInsertText()
     signal sInsertPicture()
     signal sFreehand()
     signal requestCloseMenu()
+    signal goBack()
+    signal searchWebImages()
     CirclePro{
         id: circlepro1
         x: 361
@@ -459,6 +461,9 @@ Rectangle {
         y: 117
         visible: false
         opacity: 0
+        onSActionFind: {
+            parent.searchWebImages()
+        }
     }
     SubmenuNavigation{
         id: smNavigationX
@@ -466,6 +471,9 @@ Rectangle {
         y: 117
         visible: false
         opacity: 0
+        onSReviewGoBack: {
+            parent.goBack()
+        }
     }
     SubmenuHelp{
         id: smHelpX

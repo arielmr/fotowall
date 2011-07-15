@@ -1,6 +1,5 @@
 import QtQuick 1.0
-import Qt.labs.toucharea 1.0
-
+import Qt.labs.gestures 2.0
 
 Rectangle {
     id: circleContainer
@@ -19,38 +18,48 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 source: "images/CircleM2.png"
     }
+    GestureArea {
+        id: gestureArea
+        anchors.fill: parent
+        property bool tap: false
+        Tap{
+            onFinished: {
+                circleContainer.triggered()
+            }
+        }
+    }
     MouseArea{
         anchors.fill: parent
         onClicked: {
             parent.state = "stateHit"
             circleContainer.triggered()
         }
-        TouchArea {
-            id:touchArea
-//            x: -2
-//            y: 46
-            x: -8
-            y: -27
-            width: 275
-            height: 313
-            anchors.bottomMargin: -52
-            anchors.rightMargin: -45
-            anchors.topMargin: -27
-            anchors.leftMargin: -8
-            anchors.fill: parent
-            // We are not accepting events if there are more than 2 touch points.
-            minimumTouches: 1
-            maximumTouches: 10
+//        TouchArea {
+//            id:touchArea
+////            x: -2
+////            y: 46
+//            x: -8
+//            y: -27
+//            width: 275
+//            height: 313
+//            anchors.bottomMargin: -52
+//            anchors.rightMargin: -45
+//            anchors.topMargin: -27
+//            anchors.leftMargin: -8
+//            anchors.fill: parent
+//            // We are not accepting events if there are more than 2 touch points.
+//            minimumTouches: 1
+//            maximumTouches: 10
 
-            touchPoints: [
-                TouchPoint {
-                    id: tp1
-                }
-            ]
-            onTouchStart: {
-                circleContainer.triggered()
-            }
-        }
+//            touchPoints: [
+//                TouchPoint {
+//                    id: tp1
+//                }
+//            ]
+//            onTouchStart: {
+//                circleContainer.triggered()
+//            }
+//        }
     }
         Image {
             id: image1

@@ -1,39 +1,13 @@
 import QtQuick 1.0
 
 Rectangle {
-    id:keyboard
+    id:toolbar
     width: 500
     height: 60
-    color: "#000000"
+    color: "#00000000"
 
-    signal shiftSpecial()
-
-    MouseArea{
-        x: 0
-        y: 2
-        width: 500
-        height: 58
-        anchors.leftMargin: 0
-        anchors.topMargin: 2
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 0
-        anchors.fill: parent
-
-        onClicked: {
-            if (parent.state == "selectedItem"){
-                parent.state = ""
-                parent.shiftSpecial()
-                console.log("Button was clicked!")
-            }
-            else{
-                parent.state = "selectedItem"
-                parent.shiftSpecial()
-                console.log("Button was clicked 222!")
-            }
-        }
-    }
-
-
+    signal requestLink()
+    signal requestRemoval()
 
     ItemMenuPrincipal {
         id: itemMenuPrincipal1
@@ -69,8 +43,9 @@ Rectangle {
         scale: 0.4
         itemImage: "images/menuComun/delete.png"
         onClicked: {
-            if (itemMenuPrincipal10.state=="")
-                console.log("delete clicked")
+            toolbar.requestRemoval()
+//            if (itemMenuPrincipal10.state=="")
+//                console.log("delete clicked")
         }
     }
 
@@ -178,10 +153,10 @@ Rectangle {
         scale: 0.4
 
         onClicked: {
-            if (itemMenuPrincipal10.state=="")
-                console.log("Link clicked")
-//            else
-//                console.log("olalalalal ")
+//            if (itemMenuPrincipal10.state=="")
+//                console.log("Link clicked")
+            console.log("Link clicked")
+            toolbar.requestLink()
         }
 
     }

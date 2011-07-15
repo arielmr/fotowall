@@ -4,7 +4,7 @@ Rectangle {
     id: rectangle1
     width: 450
     height: 300
-    color: "#00000000"
+    color: "#0c0c0c"
     opacity: 1
     visible: false
     signal sActionPaste()
@@ -155,6 +155,7 @@ SubAngulo {
                 target: rectangle1
                 height: 500
                 color: "#001f7c49"
+                visible: true
             }
         }
     ]

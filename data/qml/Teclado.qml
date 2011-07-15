@@ -10,6 +10,14 @@ Rectangle {
     function myMethod() {
              keyboard.keyboardLetter("Button was clicked!")
          }
+    BorderImage {
+        anchors {
+            fill: keyboard// border.visible ? border : placeHolder
+            leftMargin: -6; topMargin: -6; rightMargin: -8; bottomMargin: -8
+        }
+        source: 'images/box-shadow.png'; smooth: true
+        border.left: 10; border.top: 10; border.right: 10; border.bottom: 10
+    }
     Key {
         id: key1
         x: -17
@@ -385,7 +393,6 @@ Rectangle {
                 keyboard.keyboardLetter(keyLabel)
         }
     }
-
     Key {
         id: key23
         x: 233
@@ -399,7 +406,6 @@ Rectangle {
                 keyboard.keyboardLetter(keyLabel)
         }
     }
-
     Key {
         id: key25
         x: 333
@@ -413,11 +419,11 @@ Rectangle {
                 keyboard.keyboardLetter(keyLabel)
         }
     }
-
     Key {
         id: key26
         x: 33
         y: 85
+        smooth: true
         scale: 0.5
         keyLabel: "Z"
         onClicked: {
@@ -427,7 +433,6 @@ Rectangle {
                 keyboard.keyboardLetter(keyLabel)
         }
     }
-
     SpaceKey {
         id: spacekey1
         x: 158
@@ -439,7 +444,6 @@ Rectangle {
             parent.keyboardLetter(" ")
         }
     }
-
     ChangeKeyboard {
         id: changekeyboard1
         x: 43
@@ -455,10 +459,7 @@ Rectangle {
                 {parent.state = "numeric"
             }
         }
-
-
     }
-
     Text {
         id: text1
         x: 54
@@ -471,7 +472,6 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 30
     }
-
     IntroKey {
         id: introkey1
         x: 541

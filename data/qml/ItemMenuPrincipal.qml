@@ -1,4 +1,5 @@
 import QtQuick 1.0
+import Qt.labs.gestures 2.0
 
 Rectangle {
     id: keyboardKey
@@ -22,20 +23,17 @@ Rectangle {
         onClicked: {
             parent.clicked()
         }
-
-
-//        onClicked: {
-//            if (parent.state == "selectedItem"){
-//                parent.state = ""
-//                parent.shiftSpecial()
-//            }
-//            else{
-//                parent.state = "selectedItem"
-//                parent.shiftSpecial()
-//            }
-//        }
-
-
+    }
+    GestureArea {
+        id: gestureArea
+        anchors.fill: parent
+        property bool tap: false
+        Tap{
+            onFinished: {
+                console.log("TAP Tool")
+                keyboardKey.clicked()
+            }
+        }
     }
     Image {
         id: itemMenuPrincipal
